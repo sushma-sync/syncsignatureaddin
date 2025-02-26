@@ -5,15 +5,15 @@
   xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="MailApp">
   <Id>{C341AD31-BF7A-4C1D-99F1-D2E5896BEB0A}</Id>
   <Version>1.0</Version>
-  <ProviderName>Contoso</ProviderName>
+  <ProviderName>SyncSignature</ProviderName>
   <DefaultLocale>en-us</DefaultLocale>
-  <DisplayName DefaultValue="Office Add-ins signature sample"/>
+  <DisplayName DefaultValue="Office Add-ins signature"/>
   <Description DefaultValue="Insert your signature with ease."/>
   <IconUrl DefaultValue="https://localhost:3000/assets/final_logo.png"/>
   <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/final_logo.jpg"/>
-  <SupportUrl DefaultValue="https://www.contoso.com/help"/>
+  <SupportUrl DefaultValue="https://syncsignature.com/blog"/>
   <AppDomains>
-    <AppDomain>https://www.contoso.com</AppDomain>
+    <AppDomain>https://syncsignature.com</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Mailbox"/>
@@ -23,8 +23,6 @@
       <Set Name="Mailbox" />
     </Sets>
   </Requirements>
-
-  <!-- Old schema. This will be overridden by the VersionOverrides below. -->
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>

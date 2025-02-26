@@ -122,6 +122,14 @@ function test_template_C()
 	insert_signature(str);
 }
 
+function set_dummy_data()
+{
+	let str = get_template();
+	console.log("get_template - " + str);
+
+	insert_signature(str);
+}
+
 function navigate_to_taskpane2()
 {
   window.location.href = 'editsignature.html';

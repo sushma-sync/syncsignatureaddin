@@ -15,31 +15,15 @@
 </head>
 
 <body>  
-  <!-- The following image URL tracks diagnostic data for this sample add-in. Please remove the image tag if you reuse this sample in your own code project. -->
-  <img src="https://pnptelemetry.azurewebsites.net/pnp-officeaddins/samples/outlook-autorun-set-signature-run" />
+  
+  <!-- <img src="https://pnptelemetry.azurewebsites.net/pnp-officeaddins/samples/outlook-autorun-set-signature-run" /> -->
 
   <div class="container">
-    <h2>Add signature data</h2>
-
-    <input type="text" id="display_name" placeholder="Name*" onclick="this.select()" required />
-
-    <input type="email" id="email_id" placeholder="Email address*" onclick="this.select()" required />
-
-    <input type="text" id="job_title" placeholder="Title" />
-
-    <input type="text" id="phone_number" placeholder="Phone number" />
-
-    <input type="text" placeholder="Eg: Thank you," id="greeting_text" />
-
-    <input type="text" placeholder="Eg: She, Her" id="preferred_pronoun" />
-
-    <button id="next_button_t1" class="registerbtn" onclick="create_user_info()">Save</button>
-
-    <button id="reset_all_config_btn" class="registerbtn" onclick="reset_all_configuration()">RESET ALL</button>
-
-    <p id="message"></p>
+    <h2>Add Email Signature</h2>
+    <button id="add_signature_btn" class="registerbtn" onclick="proceedToSignaturePage()">Add Email Signature</button>
   </div>
 
 </body>
 
 </html>
+
