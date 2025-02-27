@@ -35,7 +35,6 @@ function save_signature_settings()
 	Office.context.roamingSettings.set('newMail', $("#new_mail option:selected").val());
 	Office.context.roamingSettings.set('reply', $("#reply option:selected").val());
 	Office.context.roamingSettings.set('forward', $("#forward option:selected").val());
-
 	Office.context.roamingSettings.set('override_olk_signature', $("#checkbox_sig").prop('checked'));
 
 	save_user_settings_to_roaming_settings();
@@ -128,9 +127,26 @@ function set_dummy_data()
 	console.log("get_template - " + str);
 
 	insert_signature(str);
+	getGraphAccessToken();
 }
 
 function navigate_to_taskpane2()
 {
   window.location.href = 'editsignature.html';
 }
+
+async function getGraphAccessToken() {
+    return new Promise((resolve, reject) => {
+        Office.context.auth.getAccessTokenAsync({ allowSignInPrompt: true }, function (result) {
+            if (result.status === Office.AsyncResultStatus.Succeeded) {
+                console.log("Access Token Retrieved:", result.value); // Log the token
+                resolve(result.value); // Return the token
+            } else {
+                console.error("Error retrieving access token:", result.error.message);
+                reject("Error retrieving access token: " + result.error.message);
+            }
+        });
+    });
+}
+
+
