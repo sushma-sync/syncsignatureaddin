@@ -135,18 +135,30 @@ function navigate_to_taskpane2()
   window.location.href = 'editsignature.html';
 }
 
-async function getGraphAccessToken() {
-    return new Promise((resolve, reject) => {
-        Office.context.auth.getAccessTokenAsync({ allowSignInPrompt: true }, function (result) {
-            if (result.status === Office.AsyncResultStatus.Succeeded) {
-                console.log("Access Token Retrieved:", result.value); // Log the token
-                resolve(result.value); // Return the token
-            } else {
-                console.error("Error retrieving access token:", result.error.message);
-                reject("Error retrieving access token: " + result.error.message);
+
+async function verifyUserWithSyncSignature() {
+    try {
+        const response = await fetch("https://your-syncsignature-api.com/verify-user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}` // Send token in Authorization header
             }
         });
-    });
+
+        const data = await response.json();
+
+        if (!data || !data.signature) {
+            throw new Error("Invalid user or no signature found.");
+        }
+
+        console.log("User verified:", data);
+        return data.signature; // Return signature data
+    } catch (error) {
+        console.error("Error verifying user with SyncSignature:", error);
+        return null;
+    }
 }
+
 
 
