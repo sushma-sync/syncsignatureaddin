@@ -26,7 +26,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://github.com/sushma-sync/syncsignatureaddin/blob/main/manifest_sync.xml"/>
+        <SourceLocation DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/src/manifest_sync.xml"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
