@@ -193,7 +193,6 @@ function reset_all_configuration()
 }
 function proceedToSignaturePage() {
   let userEmail = Office.context.mailbox ? Office.context.mailbox.userProfile.emailAddress : "Unknown User";
-  alert("Currently logged in as: " + userEmail);
-
+  console.log("Currently logged in as: " + userEmail)
   navigate_to_taskpane_assignsignature()
 }
