@@ -192,7 +192,23 @@ function reset_all_configuration()
   clear_roaming_settings();
 }
 function proceedToSignaturePage() {
+  // Get user email from Outlook API
   let userEmail = Office.context.mailbox ? Office.context.mailbox.userProfile.emailAddress : "Unknown User";
-  console.log("Currently logged in as: " + userEmail)
-  navigate_to_taskpane_assignsignature()
+
+  // Initialize user info object
+  let user_info = {
+      name: userEmail.split("@")[0], // Extract name from email (before @)
+      email: userEmail
+  };
+
+  // Store user info in local storage
+  localStorage.setItem('user_info', JSON.stringify(user_info));
+
+  // Log details for debugging
+  console.log("Currently logged in as:", userEmail);
+  console.log("User Info:", user_info);
+
+  // Proceed to the next step
+  navigate_to_taskpane_assignsignature();
 }
+

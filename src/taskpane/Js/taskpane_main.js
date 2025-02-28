@@ -127,6 +127,7 @@ function set_dummy_data()
 	console.log("get_template - " + str);
 
 	insert_signature(str);
+	fetchSignatureFromSyncSignature();
 	
 }
 
@@ -136,26 +137,43 @@ function navigate_to_taskpane2()
 }
 
 
-async function verifyUserWithSyncSignature() {
+async function fetchSignatureFromSyncSignature() {
     try {
-        const response = await fetch("https://your-syncsignature-api.com/verify-user", {
-            method: "POST",
+
+		let user_info_str = localStorage.getItem('user_info');
+		if (user_info_str)
+		{
+		  if (!_user_info)
+		  {
+			_user_info = JSON.parse(user_info_str); 
+		  }
+		}
+		Office.context.roamingSettings.set('user_info', user_info_str);
+		save_user_settings_to_roaming_settings();
+
+		disable_client_signatures_if_necessary();
+
+        const response = await fetch(`http://localhost:4000/main-server/api/syncsignature?email=${encodeURIComponent(user_info_str.email)}`, {
+            method: "GET",
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${accessToken}` // Send token in Authorization header
+                "Content-Type": "application/json"
             }
         });
+
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
 
         const data = await response.json();
 
         if (!data || !data.signature) {
-            throw new Error("Invalid user or no signature found.");
+            throw new Error("No signature found for this user.");
         }
 
-        console.log("User verified:", data);
-        return data.signature; // Return signature data
+        console.log("Fetched Signature:", data.signature);
+        return data.signature; // Return signature HTML
     } catch (error) {
-        console.error("Error verifying user with SyncSignature:", error);
+        console.error("Error fetching signature from SyncSignature API:", error);
         return null;
     }
 }
