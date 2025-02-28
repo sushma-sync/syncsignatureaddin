@@ -9,8 +9,8 @@
   <DefaultLocale>en-us</DefaultLocale>
   <DisplayName DefaultValue="SyncSignature"/>
   <Description DefaultValue="Insert your signature with ease."/>
-  <IconUrl DefaultValue="https://github.com/sushma-sync/syncsignatureaddin/blob/main/assets/final_logo.png"/>
-  <HighResolutionIconUrl DefaultValue="https://github.com/sushma-sync/syncsignatureaddin/blob/main/assets/final_logo.png"/>
+  <IconUrl DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/assets/final_logo.png"/>
+  <HighResolutionIconUrl DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/assets/final_logo.png"/>
   <SupportUrl DefaultValue="https://syncsignature.com/blog"/>
   <AppDomains>
     <AppDomain>https://syncsignature.com</AppDomain>
@@ -119,12 +119,12 @@
       </Hosts>
       <Resources>
         <bt:Images>
-          <bt:Image id="Icon16x16" DefaultValue="https://github.com/sushma-sync/syncsignatureaddin/blob/main/assets/final_logo.png"></bt:Image>
+          <bt:Image id="Icon16x16" DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/assets/final_logo.png"></bt:Image>
         </bt:Images>
         <bt:Urls>
-          <bt:Url id="residUrl0" DefaultValue="https://github.com/sushma-sync/syncsignatureaddin/blob/main/editsignature.html"></bt:Url>
-          <bt:Url id="Autorun" DefaultValue="https://github.com/sushma-sync/syncsignatureaddin/blob/main/autorunweb.html"></bt:Url>
-          <bt:Url id="runtimeJs" DefaultValue="https://github.com/sushma-sync/syncsignatureaddin/blob/main/autorunshared.js"></bt:Url>
+          <bt:Url id="residUrl0" DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/src/taskpane/HTML/editsignature.html"></bt:Url>
+          <bt:Url id="Autorun" DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/src/runtime/HTML/autorunweb.html"></bt:Url>
+          <bt:Url id="runtimeJs" DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/src/runtime/js/autorunshared.js"></bt:Url>
         </bt:Urls>
         <bt:ShortStrings>
           <bt:String id="residGL0" DefaultValue="Signature Injector"></bt:String>
