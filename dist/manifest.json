@@ -36,7 +36,7 @@
         }
     },
     "validDomains": [
-        "https://www.contoso.com"
+        "https://sushma-sync.github.io/syncsignatureaddin"
     ],
     "extensions": [
         {
@@ -64,8 +64,8 @@
                     "id": "runtime_1",
                     "type": "general",
                     "code": {
-                        "page": "https://www.contoso.com/autorunweb.html",
-                        "script": "https://www.contoso.com/autorunshared.js"
+                        "page": "https://sushma-sync.github.io/syncsignatureaddin/autorunweb.html",
+                        "script": "https://sushma-sync.github.io/syncsignatureaddin/autorunshared.js"
                     },
                     "lifetime": "short",
                     "actions": [
@@ -88,7 +88,7 @@
                     "id": "runtime_2",
                     "type": "general",
                     "code": {
-                        "page": "https://www.contoso.com/editsignature.html"
+                        "page": "https://sushma-sync.github.io/syncsignatureaddin/editsignature.html"
                     },
                     "lifetime": "short",
                     "actions": [
@@ -143,15 +143,15 @@
                                             "icons": [
                                                 {
                                                     "size": 16,
-                                                    "url": "https://www.contoso.com/assets/final_logo.png"
+                                                    "url": "https://sushma-sync.github.io/syncsignatureaddin/assets/final_logo.png"
                                                 },
                                                 {
                                                     "size": 32,
-                                                    "url": "https://www.contoso.com/assets/final_logo.png"
+                                                    "url": "https://sushma-sync.github.io/syncsignatureaddin/assets/final_logo.png"
                                                 },
                                                 {
                                                     "size": 80,
-                                                    "url": "https://www.contoso.com/assets/final_logo.png"
+                                                    "url": "https://sushma-sync.github.io/syncsignatureaddin/assets/final_logo.png"
                                                 }
                                             ],
                                             "supertip": {
@@ -201,15 +201,15 @@
                                             "icons": [
                                                 {
                                                     "size": 16,
-                                                    "url": "https://www.contoso.com/assets/final_logo.png"
+                                                    "url": "https://sushma-sync.github.io/syncsignatureaddin/assets/final_logo.png"
                                                 },
                                                 {
                                                     "size": 32,
-                                                    "url": "https://www.contoso.com/assets/final_logo.png"
+                                                    "url": "https://sushma-sync.github.io/syncsignatureaddin/assets/final_logo.png"
                                                 },
                                                 {
                                                     "size": 80,
-                                                    "url": "https://www.contoso.com/assets/final_logo.png"
+                                                    "url": "https://sushma-sync.github.io/syncsignatureaddin/assets/final_logo.png"
                                                 }
                                             ],
                                             "supertip": {
@@ -252,7 +252,7 @@
                     ]
                 }
             ],
-            "audienceClaimUrl": "https://www.contoso.com/editsignature.html"
+            "audienceClaimUrl": "https://sushma-sync.github.io/syncsignatureaddin/editsignature.html"
         }
     ],
     "showLoadingIndicator": false,
