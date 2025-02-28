@@ -7,7 +7,7 @@
   <Version>1.0</Version>
   <ProviderName>SyncSignature</ProviderName>
   <DefaultLocale>en-us</DefaultLocale>
-  <DisplayName DefaultValue="Office Add-ins signature"/>
+  <DisplayName DefaultValue="SyncSignature"/>
   <Description DefaultValue="Insert your signature with ease."/>
   <IconUrl DefaultValue="https://github.com/sushma-sync/syncsignatureaddin/blob/main/assets/final_logo.png"/>
   <HighResolutionIconUrl DefaultValue="https://github.com/sushma-sync/syncsignatureaddin/blob/main/assets/final_logo.png"/>
