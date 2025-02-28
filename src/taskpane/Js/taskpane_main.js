@@ -127,7 +127,7 @@ function set_dummy_data()
 	console.log("get_template - " + str);
 
 	insert_signature(str);
-	getGraphAccessToken();
+	
 }
 
 function navigate_to_taskpane2()
