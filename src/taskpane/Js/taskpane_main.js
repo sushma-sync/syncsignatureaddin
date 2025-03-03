@@ -140,21 +140,16 @@ function navigate_to_taskpane2()
 async function fetchSignatureFromSyncSignature() {
     try {
         console.log("Fetching signature from SyncSignature...");
-
+        
+        // First check if Identity API is supported
+        if (!Office.context.requirements.isSetSupported("IdentityAPI", "1.3")) {
+            console.warn("Identity API not supported in this version of Office");
+            // Consider using an alternative authentication method here
+            return null;
+        }
         // Get the access token using Office SSO
         let accessToken;
-        const authContext = Office.context.auth;
-        console.log(authContext)
-authContext.getAccessTokenAsync(function(result) {
-    if (result.status === Office.AsyncResultStatus.Succeeded) {
-        const token = result.value;
-        console.log(token);
-    } else {
-        console.log("Error obtaining token", result.error);
-    }
-});
         try {
-          
             accessToken = await Office.auth.getAccessToken({ allowSignInPrompt: false });
             console.log("Access token obtained:", accessToken);
         } catch (error) {
