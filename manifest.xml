@@ -130,7 +130,7 @@
         </bt:Urls>
         <bt:ShortStrings>
           <bt:String id="residGL0" DefaultValue="Signature Injector"></bt:String>
-          <bt:String id="residStr0" DefaultValue="Set my signature"></bt:String>
+          <bt:String id="residStr0" DefaultValue="Syncsignature"></bt:String>
         </bt:ShortStrings>
         <bt:LongStrings>
           <bt:String id="residAppDesc" DefaultValue="Insert your signature with ease."></bt:String>
