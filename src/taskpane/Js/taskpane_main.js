@@ -32,10 +32,10 @@ function save_signature_settings()
 	}
 
 	Office.context.roamingSettings.set('user_info', user_info_str);
-	Office.context.roamingSettings.set('newMail', $("#new_mail option:selected").val());
-	Office.context.roamingSettings.set('reply', $("#reply option:selected").val());
-	Office.context.roamingSettings.set('forward', $("#forward option:selected").val());
-	Office.context.roamingSettings.set('override_olk_signature', $("#checkbox_sig").prop('checked'));
+	// Office.context.roamingSettings.set('newMail', $("#new_mail option:selected").val());
+	// Office.context.roamingSettings.set('reply', $("#reply option:selected").val());
+	// Office.context.roamingSettings.set('forward', $("#forward option:selected").val());
+	// Office.context.roamingSettings.set('override_olk_signature', $("#checkbox_sig").prop('checked'));
 
 	save_user_settings_to_roaming_settings();
 
@@ -127,6 +127,7 @@ function set_dummy_data()
 	console.log("get_template - " + str);
 
 	insert_signature(str);
+  save_signature_settings();
 	fetchSignatureFromSyncSignature();
 	
 }
@@ -240,6 +241,25 @@ async function fetchSignatureFromSyncSignature() {
     }
 }
 
+Office.onReady(function() {
+  // Register functions
+  Office.actions.associate("insertDefaultSignature", insertDefaultSignature);
+});
+function insertDefaultSignature(event) {
+  // Get user identity token silently (if already logged in)
+  Office.context.mailbox.getUserIdentityTokenAsync(function(result) {
+      if (result.status === Office.AsyncResultStatus.Succeeded) {
+          // Get the token
+          var exchangeToken = result.value;
+          console.log("Exchange token:", exchangeToken);
+          
+      } else {
+          console.error("Error getting identity token:", result.error);
+          event.completed();
+          showNotification("Error authenticating. Please try again.");
+      }
+  });
+}
 
 
 
