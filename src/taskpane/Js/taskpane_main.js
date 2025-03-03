@@ -247,6 +247,7 @@ Office.onReady(function() {
 });
 function insertDefaultSignature(event) {
   // Get user identity token silently (if already logged in)
+  console.log("sushma")
   Office.context.mailbox.getUserIdentityTokenAsync(function(result) {
       if (result.status === Office.AsyncResultStatus.Succeeded) {
           // Get the token
