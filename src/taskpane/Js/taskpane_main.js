@@ -141,6 +141,32 @@ async function fetchSignatureFromSyncSignature() {
     try {
         console.log("Fetching signature from SyncSignature...");
 
+        // Get the access token using Office SSO
+        let accessToken;
+        try {
+            accessToken = await Office.auth.getAccessToken({ allowSignInPrompt: false });
+            console.log("Access token obtained:", accessToken);
+        } catch (error) {
+            console.error("Error obtaining access token:", error);
+            if (error.code === 13003) {
+                console.warn("User is not signed in. Prompting for sign-in.");
+                try {
+                    accessToken = await Office.auth.getAccessToken({ allowSignInPrompt: true });
+                } catch (signInError) {
+                    console.error("User sign-in failed:", signInError);
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }
+
+        if (!accessToken) {
+            console.warn("No access token available.");
+            return null;
+        }
+
+        // Retrieve user info from localStorage
         let user_info_str = localStorage.getItem('user_info');
         if (!user_info_str) {
             console.warn("No user_info found in localStorage.");
@@ -161,6 +187,7 @@ async function fetchSignatureFromSyncSignature() {
             return null;
         }
 
+        // Store user info in Office roaming settings
         Office.context.roamingSettings.set('user_info', user_info_str);
         console.log("User info set in roaming settings.");
 
@@ -176,7 +203,12 @@ async function fetchSignatureFromSyncSignature() {
         const response = await fetch(apiUrl, {
             method: "GET",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`, // Send the access token
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "User-Agent": navigator.userAgent
             }
         });
 
@@ -201,6 +233,7 @@ async function fetchSignatureFromSyncSignature() {
         return null;
     }
 }
+
 
 
 
