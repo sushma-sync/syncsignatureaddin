@@ -139,21 +139,41 @@ function navigate_to_taskpane2()
 
 async function fetchSignatureFromSyncSignature() {
     try {
+        console.log("Fetching signature from SyncSignature...");
 
-		let user_info_str = localStorage.getItem('user_info');
-		if (user_info_str)
-		{
-		  if (!_user_info)
-		  {
-			_user_info = JSON.parse(user_info_str); 
-		  }
-		}
-		Office.context.roamingSettings.set('user_info', user_info_str);
-		save_user_settings_to_roaming_settings();
+        let user_info_str = localStorage.getItem('user_info');
+        if (!user_info_str) {
+            console.warn("No user_info found in localStorage.");
+            return null;
+        }
 
-		disable_client_signatures_if_necessary();
+        let _user_info;
+        try {
+            _user_info = JSON.parse(user_info_str);
+            console.log("Parsed user_info:", _user_info);
+        } catch (parseError) {
+            console.error("Error parsing user_info from localStorage:", parseError);
+            return null;
+        }
 
-        const response = await fetch(`http://localhost:4000/main-server/api/syncsignature?email=${encodeURIComponent(user_info_str.email)}`, {
+        if (!_user_info || !_user_info.email) {
+            console.warn("User info is missing or does not contain an email.");
+            return null;
+        }
+
+        Office.context.roamingSettings.set('user_info', user_info_str);
+        console.log("User info set in roaming settings.");
+
+        save_user_settings_to_roaming_settings();
+        console.log("User settings saved to roaming settings.");
+
+        disable_client_signatures_if_necessary();
+        console.log("Checked and disabled client signatures if necessary.");
+
+        const apiUrl = `http://localhost:4000/main-server/api/syncsignature?email=${encodeURIComponent(_user_info.email)}`;
+        console.log("Making API request to:", apiUrl);
+
+        const response = await fetch(apiUrl, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -161,22 +181,27 @@ async function fetchSignatureFromSyncSignature() {
         });
 
         if (!response.ok) {
+            console.error(`API request failed with status ${response.status}:`, response.statusText);
             throw new Error(`API request failed with status ${response.status}`);
         }
 
         const data = await response.json();
+        console.log("Received API response:", data);
 
         if (!data || !data.signature) {
-            throw new Error("No signature found for this user.");
+            console.warn("No signature found for this user.");
+            return null;
         }
 
         console.log("Fetched Signature:", data.signature);
         return data.signature; // Return signature HTML
+
     } catch (error) {
         console.error("Error fetching signature from SyncSignature API:", error);
         return null;
     }
 }
+
 
 
 
