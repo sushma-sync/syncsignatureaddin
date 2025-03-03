@@ -143,7 +143,18 @@ async function fetchSignatureFromSyncSignature() {
 
         // Get the access token using Office SSO
         let accessToken;
+        const authContext = Office.context.auth;
+        console.log(authContext)
+authContext.getAccessTokenAsync(function(result) {
+    if (result.status === Office.AsyncResultStatus.Succeeded) {
+        const token = result.value;
+        console.log(token);
+    } else {
+        console.log("Error obtaining token", result.error);
+    }
+});
         try {
+          
             accessToken = await Office.auth.getAccessToken({ allowSignInPrompt: false });
             console.log("Access token obtained:", accessToken);
         } catch (error) {
