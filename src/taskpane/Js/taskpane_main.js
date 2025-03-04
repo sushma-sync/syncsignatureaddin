@@ -207,17 +207,25 @@ async function fetchSignatureFromSyncSignature() {
         const apiUrl = `https://server.dev.syncsignature.com/main-server/api/syncsignature?email=${encodeURIComponent(_user_info.email)}`;
         console.log("Making API request to:", apiUrl);
 
+        // const response = await fetch(apiUrl, {
+        //     method: "GET",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         "Access-Control-Allow-Origin": "*",
+        //         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        //         "Access-Control-Allow-Headers": "Authorization, Content-Type",
+        //         "User-Agent": navigator.userAgent
+        //     }
+        // });
         const response = await fetch(apiUrl, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-                "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                "User-Agent": navigator.userAgent
-            }
-        });
-
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+              // Remove CORS headers from request - these need to come from the server
+          },
+          mode: "cors", // Default mode, can also try "no-cors" if needed
+          credentials: "same-origin" // Adjust as needed: "include", "same-origin", or "omit"
+      });
         console.log(response)
         if (!response.ok) {
             console.error(`API request failed with status ${response.status}:`, response.statusText);
