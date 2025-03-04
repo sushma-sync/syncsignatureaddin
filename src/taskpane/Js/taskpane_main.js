@@ -209,13 +209,13 @@ async function fetchSignatureFromSyncSignature() {
 
         const response = await fetch(apiUrl, {
             method: "GET",
-            // headers: {
-            //     "Content-Type": "application/json",
-            //     "Access-Control-Allow-Origin": "*",
-            //     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            //     "Access-Control-Allow-Headers": "Authorization, Content-Type",
-            //     "User-Agent": navigator.userAgent
-            // }
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "User-Agent": navigator.userAgent
+            }
         });
 
         console.log(response)
