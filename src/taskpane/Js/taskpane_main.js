@@ -223,7 +223,7 @@ async function fetchSignatureFromSyncSignature() {
               "Content-Type": "application/json",
               // Remove CORS headers from request - these need to come from the server
           },
-          mode: "cors", // Default mode, can also try "no-cors" if needed
+          mode: "no-cors", // Default mode, can also try "no-cors" if needed
           credentials: "same-origin" // Adjust as needed: "include", "same-origin", or "omit"
       });
         console.log(response)
