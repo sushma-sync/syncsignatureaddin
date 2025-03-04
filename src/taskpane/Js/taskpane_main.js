@@ -142,36 +142,36 @@ async function fetchSignatureFromSyncSignature() {
     try {
         console.log("Fetching signature from SyncSignature...");
         
-        // First check if Identity API is supported
-        if (!Office.context.requirements.isSetSupported("IdentityAPI", "1.3")) {
-            console.warn("Identity API not supported in this version of Office");
-            // Consider using an alternative authentication method here
-            return null;
-        }
-        // Get the access token using Office SSO
-        let accessToken;
-        try {
-            accessToken = await Office.auth.getAccessToken({ allowSignInPrompt: false });
-            console.log("Access token obtained:", accessToken);
-        } catch (error) {
-            console.error("Error obtaining access token:", error);
-            if (error.code === 13003) {
-                console.warn("User is not signed in. Prompting for sign-in.");
-                try {
-                    accessToken = await Office.auth.getAccessToken({ allowSignInPrompt: true });
-                } catch (signInError) {
-                    console.error("User sign-in failed:", signInError);
-                    return null;
-                }
-            } else {
-                return null;
-            }
-        }
+        // // First check if Identity API is supported
+        // if (!Office.context.requirements.isSetSupported("IdentityAPI", "1.3")) {
+        //     console.warn("Identity API not supported in this version of Office");
+        //     // Consider using an alternative authentication method here
+        //     return null;
+        // }
+        // // Get the access token using Office SSO
+        // let accessToken;
+        // try {
+        //     accessToken = await Office.auth.getAccessToken({ allowSignInPrompt: false });
+        //     console.log("Access token obtained:", accessToken);
+        // } catch (error) {
+        //     console.error("Error obtaining access token:", error);
+        //     if (error.code === 13003) {
+        //         console.warn("User is not signed in. Prompting for sign-in.");
+        //         try {
+        //             accessToken = await Office.auth.getAccessToken({ allowSignInPrompt: true });
+        //         } catch (signInError) {
+        //             console.error("User sign-in failed:", signInError);
+        //             return null;
+        //         }
+        //     } else {
+        //         return null;
+        //     }
+        // }
 
-        if (!accessToken) {
-            console.warn("No access token available.");
-            return null;
-        }
+        // if (!accessToken) {
+        //     console.warn("No access token available.");
+        //     return null;
+        // }
 
         // Retrieve user info from localStorage
         let user_info_str = localStorage.getItem('user_info');
@@ -204,7 +204,7 @@ async function fetchSignatureFromSyncSignature() {
         disable_client_signatures_if_necessary();
         console.log("Checked and disabled client signatures if necessary.");
 
-        const apiUrl = `http://localhost:4000/main-server/api/syncsignature?email=${encodeURIComponent(_user_info.email)}`;
+        const apiUrl = `https://server.dev.syncsignature.com/api/syncsignature?email=${encodeURIComponent(_user_info.email)}`;
         console.log("Making API request to:", apiUrl);
 
         const response = await fetch(apiUrl, {
