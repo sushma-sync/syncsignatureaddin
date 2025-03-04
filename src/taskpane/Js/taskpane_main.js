@@ -207,16 +207,7 @@ async function fetchSignatureFromSyncSignature() {
         const apiUrl = `https://server.dev.syncsignature.com/main-server/api/syncsignature?email=${encodeURIComponent(_user_info.email)}`;
         console.log("Making API request to:", apiUrl);
 
-        // const response = await fetch(apiUrl, {
-        //     method: "GET",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         "Access-Control-Allow-Origin": "*",
-        //         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        //         "Access-Control-Allow-Headers": "Authorization, Content-Type",
-        //         "User-Agent": navigator.userAgent
-        //     }
-        // });
+        
         const response = await fetch(apiUrl, {
           method: "GET",
           headers: {
@@ -226,22 +217,18 @@ async function fetchSignatureFromSyncSignature() {
           mode: "no-cors", // Default mode, can also try "no-cors" if needed
           credentials: "same-origin" // Adjust as needed: "include", "same-origin", or "omit"
       });
-        console.log(response)
-        if (!response.ok) {
-            console.error(`API request failed with status ${response.status}:`, response.statusText);
-            throw new Error(`API request failed with status ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("Received API response:", data);
-
-        if (!data || !data.signature) {
-            console.warn("No signature found for this user.");
-            return null;
-        }
-
-        console.log("Fetched Signature:", data.signature);
-        return data.signature; // Return signature HTML
+      console.log("Response status:", response.status);
+      console.log("Response type:", response.type);
+      
+      if (!response.ok) {
+          const errorText = await response.text();
+          console.error("Error response:", errorText);
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log("Received data:", data);
+      return data;
 
     } catch (error) {
         console.error("Error fetching signature from SyncSignature API:", error);
