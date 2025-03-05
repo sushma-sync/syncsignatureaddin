@@ -109,7 +109,7 @@ function addTemplateSignature(signatureDetails, eventObj, signatureImageBase64) 
 
 function addTemplateSignatureNew(signatureDetails, eventObj, signatureImageBase64) {
   Office.context.mailbox.item.body.setSignatureAsync(
-    signatureDetails.signature,
+    signatureDetails,
     {
       coercionType: "html",
       asyncContext: eventObj,
