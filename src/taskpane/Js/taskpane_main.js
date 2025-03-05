@@ -1,46 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-const { createNestablePublicClientApplication } = require("@azure/msal-browser");
-
-let pca = undefined;
-let isPCAInitialized = false;
-let requestId = generateUUID();
-let logLines = [];
-
-
-function log(message, error) {
-  console.log(message, error);
-  logLines.push({
-    timestamp: Date.now().toString(),
-    line: message + (error ? ' ' + JSON.stringify(error) : ''),
-    level: error ? 'ERROR' : 'INFO',
-  });
-}
-
-function initializePCA() {
-  return new Office.Promise(function (resolve, reject) {
-    if (isPCAInitialized) {
-      resolve();
-      return;
-    }
-    
-    // Initialize the public client application
-    createNestablePublicClientApplication({
-      auth: {
-        clientId: "3e201f82-64a7-469e-90d6-28722990edb5", // Replace with your actual client ID if not using env vars
-        authority: 'https://login.microsoftonline.com/common',
-      },
-    }).then(function(localPca) {
-      pca = localPca;
-      isPCAInitialized = true;
-      log('PCA initialized successfully');
-      resolve();
-    }).catch(function(error) {
-      log('Error creating PCA', error);
-      reject(error);
-    });
-  });
-}
 
 function save_user_settings_to_roaming_settings()
 {
@@ -59,13 +18,6 @@ function disable_client_signatures_if_necessary()
 	  console.log("disable_client_signature_if_necessary - " + JSON.stringify(asyncResult));
 	});
   }
-}
-function generateUUID() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = (Math.random() * 16) | 0,
-      v = c == 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
 }
 
 function save_signature_settings()
@@ -97,79 +49,6 @@ function save_signature_settings()
   }
 }
 
-function headers(token) {
-  return {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer ' + token,
-    'X-Request-ID': requestId,
-    'X-Client-Type': 'OutlookAddin',
-  };
-}
-
-// Get request headers with token, similar to getRequestHeaders in the first code
-function getRequestHeaders() {
-  const tokenRequest = {
-    scopes: ['User.Read', 'openid', 'profile', 'email'],
-  };
-  
-  // Handle mobile platforms separately
-  if (Office.context.diagnostics.platform === Office.PlatformType.Android || 
-      Office.context.diagnostics.platform === Office.PlatformType.iOS) {
-    return new Office.Promise(function (resolve, reject) {
-      initializePCA().then(function() {
-        pca.acquireTokenSilent(tokenRequest).then(function(userAccount) {
-          log('Token acquired silently for mobile');
-          resolve(headers(userAccount.idToken));
-        }).catch(function(error) {
-          log('Error acquiring token silently for mobile', error);
-          reject(error);
-        });
-      });
-    });
-  } else {
-    // For desktop/web platforms
-    return new Office.Promise(function (resolve, reject) {
-      // Try OfficeRuntime.auth first
-      if (OfficeRuntime && OfficeRuntime.auth) {
-        OfficeRuntime.auth.getAccessToken()
-          .then(function (token) {
-            log('Token acquired from OfficeRuntime');
-            resolve(headers(token));
-          }).catch(function (error) {
-            log('Error acquiring token from OfficeRuntime, falling back to MSAL', error);
-            // Fall back to MSAL if OfficeRuntime fails
-            initializePCA().then(function() {
-              pca.acquireTokenSilent(tokenRequest).then(function(userAccount) {
-                log('Token acquired silently from MSAL fallback');
-                resolve(headers(userAccount.idToken));
-              }).catch(function(error) {
-                log('Error acquiring token silently from MSAL fallback', error);
-                reject(error);
-              });
-            }).catch(function(error) {
-              log('Failed to initialize PCA for fallback', error);
-              reject(error);
-            });
-          });
-      } else {
-        // If OfficeRuntime.auth is not available, use MSAL directly
-        initializePCA().then(function() {
-          pca.acquireTokenSilent(tokenRequest).then(function(userAccount) {
-            log('Token acquired silently (OfficeRuntime unavailable)');
-            resolve(headers(userAccount.idToken));
-          }).catch(function(error) {
-            log('Error acquiring token silently (OfficeRuntime unavailable)', error);
-            reject(error);
-          });
-        }).catch(function(error) {
-          log('Failed to initialize PCA (OfficeRuntime unavailable)', error);
-          reject(error);
-        });
-      }
-    });
-  }
-}
 
 
 function set_body(str)
@@ -242,79 +121,6 @@ function test_template_C()
 	insert_signature(str);
 }
 
-async function fetchSignatureFromSyncSignature() {
-  try {
-      console.log("Fetching signature from SyncSignature...");
-      
-      // Retrieve user info from localStorage
-      let user_info_str = localStorage.getItem('user_info');
-      if (!user_info_str) {
-          console.warn("No user_info found in localStorage.");
-          return null;
-      }
-
-      let _user_info;
-      try {
-          _user_info = JSON.parse(user_info_str);
-          console.log("Parsed user_info:", _user_info);
-      } catch (parseError) {
-          console.error("Error parsing user_info from localStorage:", parseError);
-          return null;
-      }
-
-      if (!_user_info || !_user_info.email) {
-          console.warn("User info is missing or does not contain an email.");
-          return null;
-      }
-
-      // Store user info in Office roaming settings
-      Office.context.roamingSettings.set('user_info', user_info_str);
-      console.log("User info set in roaming settings.");
-
-      save_user_settings_to_roaming_settings();
-      console.log("User settings saved to roaming settings.");
-
-      disable_client_signatures_if_necessary();
-      console.log("Checked and disabled client signatures if necessary.");
-
-      const apiUrl = `https://server.dev.syncsignature.com/main-server/api/syncsignature?email=${encodeURIComponent(_user_info.email)}`;
-      console.log("Making API request to:", apiUrl);
-
-      // Get authentication headers with token
-      let authHeaders;
-      try {
-          authHeaders = await getRequestHeaders();
-          console.log("Authentication headers obtained");
-      } catch (authError) {
-          console.error("Failed to obtain authentication headers:", authError);
-          return null;
-      }
-      
-      const response = await fetch(apiUrl, {
-          method: "GET",
-          headers: authHeaders,
-          mode: "cors", // Changed from "no-cors" to "cors" since we now have proper auth
-          credentials: "same-origin"
-      });
-      
-      console.log("Response status:", response.status);
-      
-      if (!response.ok) {
-          const errorText = await response.text();
-          console.error("Error response:", errorText);
-          throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      console.log("Received signature data:", data);
-      return data;
-
-  } catch (error) {
-      console.error("Error fetching signature from SyncSignature API:", error);
-      return null;
-  }
-}
-
 function set_dummy_data()
 {
 	let str = get_template();
@@ -330,7 +136,9 @@ function navigate_to_taskpane2()
 {
   window.location.href = 'editsignature.html';
 }
-async function fetchSignatureFromSyncSignatureold() {
+
+
+async function fetchSignatureFromSyncSignature() {
     try {
         console.log("Fetching signature from SyncSignature...");
         
@@ -428,57 +236,26 @@ async function fetchSignatureFromSyncSignatureold() {
     }
 }
 
+Office.onReady(function() {
+  // Register functions
+  Office.actions.associate("insertDefaultSignature", insertDefaultSignature);
+});
 function insertDefaultSignature(event) {
-  console.log("Inserting default signature");
-  
-  getRequestHeaders()
-      .then(function(headers) {
-          console.log("Authentication headers obtained for default signature");
+  // Get user identity token silently (if already logged in)
+  console.log("sushma")
+  Office.context.mailbox.getUserIdentityTokenAsync(function(result) {
+      if (result.status === Office.AsyncResultStatus.Succeeded) {
+          // Get the token
+          var exchangeToken = result.value;
+          console.log("Exchange token:", exchangeToken);
           
-          // Get user info and proceed with inserting signature
-          let user_info_str = localStorage.getItem('user_info');
-          if (!user_info_str) {
-              console.warn("No user_info found for default signature");
-              event.completed();
-              return;
-          }
-          
-          let _user_info = JSON.parse(user_info_str);
-          
-          // Here you can proceed with signature insertion logic
-          // using the authentication headers and user info
-          
-          // For example, fetch the user's signature from the server
-          fetchSignatureFromSyncSignature()
-              .then(function(signatureData) {
-                  if (signatureData && signatureData.html) {
-                      // Insert the signature
-                      insert_signature(signatureData.html);
-                      console.log("Default signature inserted successfully");
-                  } else {
-                      console.warn("No signature data received");
-                  }
-                  event.completed();
-              })
-              .catch(function(error) {
-                  console.error("Error fetching signature:", error);
-                  event.completed();
-              });
-      })
-      .catch(function(error) {
-          console.error("Error getting authentication headers:", error);
+      } else {
+          console.error("Error getting identity token:", result.error);
           event.completed();
-      });
+          showNotification("Error authenticating. Please try again.");
+      }
+  });
 }
-
-
-// Keep the rest of your existing functions
-// ...
-
-// Office.onReady(function() {
-//   // Register functions
-//   Office.actions.associate("insertDefaultSignature", insertDefaultSignature);
-// });
 
 
 
