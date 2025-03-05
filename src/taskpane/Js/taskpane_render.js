@@ -203,7 +203,8 @@ function proceedToSignaturePage() {
 
   // Store user info in local storage
   localStorage.setItem('user_info', JSON.stringify(user_info));
-
+  let str = get_template();
+  document.getElementById("dummy_signature").innerHTML = str;
   // Log details for debugging
   console.log("Currently logged in as:", userEmail);
   console.log("User Info:", user_info);
