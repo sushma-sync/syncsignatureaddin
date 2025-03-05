@@ -141,9 +141,10 @@ function get_template_name(compose_type) {
  * @returns HTML signature in requested template format
  */
 function get_signature_info(template_name, user_info) {
-  if (template_name === "templateB") return get_template_B_info(user_info);
-  if (template_name === "templateC") return get_template_C_info(user_info);
-  return get_template_A_info(user_info);
+  // if (template_name === "templateB") return get_template_B_info(user_info);
+  // if (template_name === "templateC") return get_template_C_info(user_info);
+  // return get_template_A_info(user_info);
+  return get_template_image();
 }
 
 /**
@@ -258,6 +259,96 @@ function get_template_C_info(user_info) {
     logoBase64: null,
     logoFileName: null,
   };
+}
+
+function get_template_image() {
+  return `
+    <table width="600px" cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, Helvetica, sans-serif; user-select: none;">
+    <tbody>
+        <tr>
+            <td aria-label="main-content" style="border-collapse: collapse; font-size: inherit; padding-bottom: 2px;">
+                <table cellpadding="0" cellspacing="0" border="0">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <table cellpadding="0px" cellspacing="0" border="0">
+                                    <tbody>
+                                        <tr>
+                                            <td style="vertical-align: top; padding-right: 14px;">
+                                                <table align="center" cellpadding="0" cellspacing="0" style="font-size: inherit;"></table>
+                                                <table align="center" cellpadding="0" cellspacing="0" style="font-size: inherit;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="padding-bottom: 8px;"><img src="https://static.sendsig.com/signatures/db7e1098-9a04-4228-846a-5e86048d1ca6/company-logo-1741175789012.png" alt="company-logo" width="80" title="Company logo" style="display: block;" /></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                            <td style="vertical-align: top;">
+                                                <table cellpadding="0px" cellspacing="0" border="0" style="border-collapse: collapse;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <table cellpadding="0" cellspacing="0" border="0" style="font-size: inherit; padding-bottom: 6px;">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td id="name-text-id" style="font-weight: 700; padding-bottom: 2px; font-size: 13px; line-height: 1.09; color: rgb(127, 86, 217); font-family: inherit;">Olivia Bolton</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td id="position-text-id" style="font-size: 12px; line-height: 1.09; color: rgb(0, 0, 0); font-family: inherit; padding-bottom: 2px;">Marketing Manager</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="separator-text-id" colspan="2" style="border-top: 1px solid rgb(127, 86, 217); line-height: 0;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <table cellpadding="0" cellspacing="0" border="0" style="font-size: inherit; padding-top: 8px;">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td valign="middle" style="padding: 0px 0px 6px; text-align: left; align-items: center;"><span style="vertical-align: middle; display: inline-block;"><img src="https://static.sendsig.com/icons/db7e1098-9a04-4228-846a-5e86048d1ca6/phone-icon-84fd5c3e-e85a-4413-9134-2a565ee6ae59.png?timestamp=1741175793582" alt="phone" height="16" width="16" /></span> <span id="phone-text-id" class="item-center justify-center" align="top" style="font-size: 12px; color: rgb(0, 0, 0); text-align: left; text-decoration: none; vertical-align: middle;">212-323</span></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td style="padding: 0px 0px 6px;"><span style="vertical-align: middle; display: inline-block;"><img src="https://static.sendsig.com/icons/db7e1098-9a04-4228-846a-5e86048d1ca6/email-icon-a088a992-7db1-48db-a1a4-0f0e743b8d2d.png?timestamp=1741175793638" alt="email" height="16" width="16" /></span> <a id="email-text-id" valign="middle" href="https://server.utags.co/mhFwEJQh" target="_blank" rel="noreferrer" style="font-size: 12px; color: rgb(0, 0, 0); text-align: left; text-decoration: none; vertical-align: middle;">dummyemail@dummy.com</a></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td style="align-items: center; padding: 0px 0px 6px;"><span style="vertical-align: middle;"><img src="https://static.sendsig.com/icons/db7e1098-9a04-4228-846a-5e86048d1ca6/website-icon-e4dd73ed-6c26-4d04-8a12-418923ce4b8c.png?timestamp=1741175793685" alt="website" height="16" width="16" /></span> <a id="website-text-id" href="https://server.utags.co/tYDUZlfI" style="font-size: 12px; color: rgb(0, 0, 0); text-align: left; text-decoration: none; vertical-align: middle;">yourwebsite.com</a></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td style="padding-bottom: 6px;">
+                                                                                <table cellpadding="0" cellspacing="0" style="border-collapse: collapse; font-size: inherit;">
+                                                                                    <tbody>
+                                                                                        <tr>
+                                                                                            <td style="padding-right: 8px;"><a href="https://server.utags.co/DMDMyzSd" style="display: inline-block;"><img src="https://static.sendsig.com/icons/db7e1098-9a04-4228-846a-5e86048d1ca6/facebook-icon-77fd0edb-6f79-4fb9-8274-aa6448d0ea9e.png?timestamp=1741175793709" alt="facebook" height="22" width="20" /></a></td>
+                                                                                            <td style="padding-right: 8px;"><a href="https://server.utags.co/yTazrdmg" style="display: inline-block;"><img src="https://static.sendsig.com/icons/db7e1098-9a04-4228-846a-5e86048d1ca6/instagram-icon-e6c94c74-33e3-4128-948e-e35c8b8b4db4.png?timestamp=1741175793713" alt="instagram" height="22" width="20" /></a></td>
+                                                                                            <td><a href="https://server.utags.co/MbBRZaEL" style="display: inline-block;"><img src="https://static.sendsig.com/icons/db7e1098-9a04-4228-846a-5e86048d1ca6/linkedin-icon-30abf2e5-f527-4a3a-b9dd-d76394745e4a.png?timestamp=1741175793748" alt="linkedin" height="22" width="20" /></a></td>
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+  `;
 }
 
 /**
