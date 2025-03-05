@@ -12,6 +12,7 @@
  */
 function checkSignature(eventObj) {
   let user_info_str = Office.context.roamingSettings.get("user_info");
+  console.log("Autorun process",user_info_str)
   if (!user_info_str) {
     display_insight_infobar();
   } else {
@@ -54,7 +55,9 @@ function checkSignature(eventObj) {
 function insert_auto_signature(compose_type, user_info, eventObj) {
   let template_name = get_template_name(compose_type);
   let signature_info = get_signature_info(template_name, user_info);
-  addTemplateSignature(signature_info, eventObj);
+  console.log("Signature Info >>")
+  console.log(signature_info)
+  addTemplateSignatureNew(signature_info, eventObj);
 }
 
 /**
@@ -102,6 +105,19 @@ function addTemplateSignature(signatureDetails, eventObj, signatureImageBase64) 
       }
     );
   }
+}
+
+function addTemplateSignatureNew(signatureDetails, eventObj, signatureImageBase64) {
+  Office.context.mailbox.item.body.setSignatureAsync(
+    signatureDetails.signature,
+    {
+      coercionType: "html",
+      asyncContext: eventObj,
+    },
+    function (asyncResult) {
+      asyncResult.asyncContext.completed();
+    }
+  );
 }
 
 /**

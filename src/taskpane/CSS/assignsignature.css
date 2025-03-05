@@ -58,10 +58,10 @@
   #submit_button{
     position: relative;
     left: 14px;
-    width: 86px;
+    width: 100px;
     height: 32px;
     color: white;
-    background: #005696 0% 0% no-repeat padding-box;
+    background: #10446d 0% 0% no-repeat padding-box;
     border-radius: 2px;
     opacity: 1;
     padding-bottom: 10px;
