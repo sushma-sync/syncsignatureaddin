@@ -123,10 +123,8 @@ function test_template_C()
 
 function set_dummy_data()
 {
-	let str = get_template();
+	let str = get_template_image();
 	console.log("get_template - " + str);
-  
-
 	insert_signature(str);
   save_signature_settings();
 	fetchSignatureFromSyncSignature();
