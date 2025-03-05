@@ -72,6 +72,7 @@ function set_body(signatureDetails, eventObj) {
 
 function set_bodynew(signatureDetails, eventObj) {
  
+   console.log("set_bodynew - " + JSON.stringify(signatureDetails));
     Office.context.mailbox.item.body.setAsync(
       "<br/><br/>" + signatureDetails,
       {

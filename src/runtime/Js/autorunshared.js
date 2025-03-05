@@ -53,6 +53,7 @@ function checkSignature(eventObj) {
  * @param {*} eventObj Office event object
  */
 function insert_auto_signature(compose_type, user_info, eventObj) {
+  console.log("insert_auto_signature")
   let template_name = get_template_name(compose_type);
   console.log(template_name)
   let signature_info = get_signature_info(template_name, user_info);
@@ -109,6 +110,7 @@ function addTemplateSignature(signatureDetails, eventObj, signatureImageBase64) 
 }
 
 function addTemplateSignatureNew(signatureDetails, eventObj, signatureImageBase64) {
+  console.log("addTemplateSignatureNew function >>")
   Office.context.mailbox.item.body.setSignatureAsync(
     signatureDetails,
     {
