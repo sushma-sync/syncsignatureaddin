@@ -125,7 +125,7 @@ function set_dummy_data()
 {
 	let str = get_template();
 	console.log("get_template - " + str);
-  ocument.getElementById("dummy_signature").innerHTML = str;
+  document.getElementById("dummy_signature").innerHTML = str;
 
 	insert_signature(str);
   save_signature_settings();
