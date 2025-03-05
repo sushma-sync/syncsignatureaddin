@@ -3,17 +3,18 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
   xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="MailApp">
-  <Id>{C341AD31-BF7A-4C1D-99F1-D2E5896BEB0A}</Id>
-  <Version>2.0</Version>
+  <Id>C341AD31-BF7A-4C1D-99F1-D2E5896BEB0B</Id>
+   <Version>1.0.0.1</Version>
   <ProviderName>SyncSignature</ProviderName>
   <DefaultLocale>en-us</DefaultLocale>
   <DisplayName DefaultValue="SyncSignature"/>
-  <Description DefaultValue="Insert your signature with ease."/>
+  <Description DefaultValue="Outlook Add-In: Effortlessly design and centrally control email signatures for all Microsoft 365 users."/>
   <IconUrl DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/assets/final_logo.png"/>
   <HighResolutionIconUrl DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/assets/final_logo.png"/>
   <SupportUrl DefaultValue="https://syncsignature.com/blog"/>
   <AppDomains>
     <AppDomain>https://syncsignature.com</AppDomain>
+    <AppDomain>https://sushma-sync.github.io</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Mailbox"/>

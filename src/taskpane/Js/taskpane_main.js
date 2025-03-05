@@ -125,11 +125,11 @@ function set_dummy_data()
 {
 	let str = get_template();
 	console.log("get_template - " + str);
+  ocument.getElementById("dummy_signature").innerHTML = str;
 
 	insert_signature(str);
   save_signature_settings();
 	fetchSignatureFromSyncSignature();
-	
 }
 
 function navigate_to_taskpane2()
@@ -141,39 +141,6 @@ function navigate_to_taskpane2()
 async function fetchSignatureFromSyncSignature() {
     try {
         console.log("Fetching signature from SyncSignature...");
-        
-        // // First check if Identity API is supported
-        // if (!Office.context.requirements.isSetSupported("IdentityAPI", "1.3")) {
-        //     console.warn("Identity API not supported in this version of Office");
-        //     // Consider using an alternative authentication method here
-        //     return null;
-        // }
-        // // Get the access token using Office SSO
-        // let accessToken;
-        // try {
-        //     accessToken = await Office.auth.getAccessToken({ allowSignInPrompt: false });
-        //     console.log("Access token obtained:", accessToken);
-        // } catch (error) {
-        //     console.error("Error obtaining access token:", error);
-        //     if (error.code === 13003) {
-        //         console.warn("User is not signed in. Prompting for sign-in.");
-        //         try {
-        //             accessToken = await Office.auth.getAccessToken({ allowSignInPrompt: true });
-        //         } catch (signInError) {
-        //             console.error("User sign-in failed:", signInError);
-        //             return null;
-        //         }
-        //     } else {
-        //         return null;
-        //     }
-        // }
-
-        // if (!accessToken) {
-        //     console.warn("No access token available.");
-        //     return null;
-        // }
-
-        // Retrieve user info from localStorage
         let user_info_str = localStorage.getItem('user_info');
         if (!user_info_str) {
             console.warn("No user_info found in localStorage.");
@@ -212,10 +179,9 @@ async function fetchSignatureFromSyncSignature() {
           method: "GET",
           headers: {
               "Content-Type": "application/json",
-              // Remove CORS headers from request - these need to come from the server
+              "Accept": "application/json"
           },
           mode: "no-cors", // Default mode, can also try "no-cors" if needed
-          credentials: "same-origin" // Adjust as needed: "include", "same-origin", or "omit"
       });
       console.log("Response status:", response.status);
       console.log("Response type:", response.type);
