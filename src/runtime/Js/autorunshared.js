@@ -54,6 +54,7 @@ function checkSignature(eventObj) {
  */
 function insert_auto_signature(compose_type, user_info, eventObj) {
   let template_name = get_template_name(compose_type);
+  console.log(template_name)
   let signature_info = get_signature_info(template_name, user_info);
   console.log("Signature Info >>")
   console.log(signature_info)
@@ -145,6 +146,7 @@ function display_insight_infobar() {
  * @returns Name of the template to use for the compose type
  */
 function get_template_name(compose_type) {
+  console.log(compose_type)
   if (compose_type === "reply") return Office.context.roamingSettings.get("reply");
   if (compose_type === "forward") return Office.context.roamingSettings.get("forward");
   return Office.context.roamingSettings.get("newMail");
@@ -160,6 +162,7 @@ function get_signature_info(template_name, user_info) {
   // if (template_name === "templateB") return get_template_B_info(user_info);
   // if (template_name === "templateC") return get_template_C_info(user_info);
   // return get_template_A_info(user_info);
+  console.log(get_template_image())
   return get_template_image();
 }
 

@@ -17,7 +17,7 @@ function insert_auto_signature(compose_type, user_info, eventObj) {
   let template_name = get_template_name(compose_type);
   let signatureDetails = get_signature_info(template_name, user_info);
   if (Office.context.mailbox.item.itemType == "appointment") {
-    set_body(signatureDetails, eventObj);
+    set_bodynew(signatureDetails, eventObj);
   } else {
     addTemplateSignature(signatureDetails, eventObj);
   }
@@ -67,5 +67,21 @@ function set_body(signatureDetails, eventObj) {
       }
     );
   }
+  
+}
+
+function set_bodynew(signatureDetails, eventObj) {
+ 
+    Office.context.mailbox.item.body.setAsync(
+      "<br/><br/>" + signatureDetails,
+      {
+        coercionType: "html",
+        asyncContext: eventObj,
+      },
+      function (asyncResult) {
+
+        asyncResult.asyncContext.completed();
+      }
+    );
   
 }
