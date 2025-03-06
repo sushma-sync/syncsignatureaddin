@@ -121,27 +121,24 @@ function test_template_C()
 	insert_signature(str);
 }
 
-function set_dummy_data()
+function set_signature()
 {
+  // Get user email from Outlook API
   let userEmail = Office.context.mailbox ? Office.context.mailbox.userProfile.emailAddress : "Unknown User";
   let user_info = {
-      name: userEmail.split("@")[0], // Extract name from email (before @)
+      name: userEmail.split("@")[0], 
       email: userEmail
   };
-  
   localStorage.setItem('user_info', JSON.stringify(user_info));
-  console.log("Currently logged in as:", userEmail);
   console.log("User Info:", user_info);
-
-	let str = get_template_image();
-	console.log("get_template - " + str);
-  document.getElementById("dummy_signature").innerHTML = str;
-	insert_signature(str);
-  save_signature_settings();
-	const signature = fetchSignatureFromSyncSignature();
-  console.log(signature)
+	// let str = get_template_image();
+  // document.getElementById("dummy_signature").innerHTML = str;
+	// insert_signature(str);
+	let signature = fetchSignatureFromSyncSignature();
+  console.log("Signature >>", signature)
   document.getElementById("dummy_signature").innerHTML = signature;
   insert_signature(signature);
+  save_signature_settings();
 }
 
 function navigate_to_taskpane2()
