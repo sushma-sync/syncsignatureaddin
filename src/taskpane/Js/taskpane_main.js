@@ -123,6 +123,17 @@ function test_template_C()
 
 function set_dummy_data()
 {
+  let userEmail = Office.context.mailbox ? Office.context.mailbox.userProfile.emailAddress : "Unknown User";
+  let user_info = {
+      name: userEmail.split("@")[0], // Extract name from email (before @)
+      email: userEmail
+  };
+  // Store user info in local storage
+  localStorage.setItem('user_info', JSON.stringify(user_info));
+  // Log details for debugging
+  console.log("Currently logged in as:", userEmail);
+  console.log("User Info:", user_info);
+  
 	let str = get_template_image();
 	console.log("get_template - " + str);
   document.getElementById("dummy_signature").innerHTML = str;
@@ -182,7 +193,7 @@ async function fetchSignatureFromSyncSignature() {
           },
           mode: "no-cors", // Default mode, can also try "no-cors" if needed
       });
-      console.log("Response status:", response.status);
+      console.log("Response status:", response);
       console.log("Response type:", response.type);
       
       if (!response.ok) {
