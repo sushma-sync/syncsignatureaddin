@@ -191,14 +191,18 @@ async function fetchSignatureFromSyncSignature() {
           },
           mode: "cors", 
         });
-      if (!response.ok) {
-          const errorText = await response.text();
-          console.error("Error response:", errorText);
-          throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log("Received data:", data);
-      console.log("Received data:", data.signature);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Error response:", errorText);
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        else{
+            console.log("Response status:", response.status);
+        }
+        const data = await response.json();
+        console.log("Received data:", data);
+        console.log("Received data:", data.signature);
       return data.signature;
 
     } catch (error) {
