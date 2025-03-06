@@ -139,7 +139,9 @@ function set_dummy_data()
   document.getElementById("dummy_signature").innerHTML = str;
 	insert_signature(str);
   save_signature_settings();
-	fetchSignatureFromSyncSignature();
+	const signature = fetchSignatureFromSyncSignature();
+  document.getElementById("dummy_signature").innerHTML = signature;
+  insert_signature(signature);
 }
 
 function navigate_to_taskpane2()
@@ -192,17 +194,9 @@ async function fetchSignatureFromSyncSignature() {
           },
           mode: "cors", // Default mode, can also try "no-cors" if needed
         });
-        
-      //   const response = await fetch(apiUrl, {
-      //     method: "GET",
-      //     headers: {
-      //         "Content-Type": "application/json",
-      //         "Accept": "application/json"
-      //     },
-      //     mode: "no-cors", // Default mode, can also try "no-cors" if needed
-      // });
       console.log("Response status:", response);
       console.log("Response type:", response.type);
+
       
       if (!response.ok) {
           const errorText = await response.text();
@@ -212,7 +206,7 @@ async function fetchSignatureFromSyncSignature() {
       
       const data = await response.json();
       console.log("Received data:", data);
-      return data;
+      return data.signature;
 
     } catch (error) {
         console.error("Error fetching signature from SyncSignature API:", error);
