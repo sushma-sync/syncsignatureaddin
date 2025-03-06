@@ -205,8 +205,8 @@ async function fetchSignatureFromSyncSignature() {
         }
         const data = await response.json();
         console.log("Received data:", data);
-        console.log("Received data:", data.signature);
-      return data.signature;
+        console.log("Received data:", data.html);
+      return data.html;
 
     } catch (error) {
         console.error("Error fetching signature from SyncSignature API:", error);
