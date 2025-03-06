@@ -134,11 +134,11 @@ function set_syncsignature()
   console.log("User Info:", user_info);
 //let str = get_template_image();
 	let signature = fetchSignatureFromSyncSignature();
+  console.log("signature >> ", signature)
   if(signature)
   {
-    document.getElementById("dummy_signature").innerHTML = str;
+    document.getElementById("dummy_signature").innerHTML = signature;
     insert_signature(signature);
-    console.log("signature >> ", signature)
     save_signature_settings();
   }
 }
@@ -203,10 +203,11 @@ async function fetchSignatureFromSyncSignature() {
         else{
             console.log("Response status:", response.status);
         }
+        debugger;
         const data = await response.json();
         console.log("Received data:", data);
         console.log("Received data:", data.html);
-      return data.html;
+        return data.html;
 
     } catch (error) {
         console.error("Error fetching signature from SyncSignature API:", error);
