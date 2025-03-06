@@ -131,13 +131,13 @@ function set_signature()
   };
   localStorage.setItem('user_info', JSON.stringify(user_info));
   console.log("User Info:", user_info);
-	// let str = get_template_image();
-  // document.getElementById("dummy_signature").innerHTML = str;
-	// insert_signature(str);
+	let str = get_template_image();
+  document.getElementById("dummy_signature").innerHTML = str;
+	insert_signature(str);
 	let signature = fetchSignatureFromSyncSignature();
   console.log("Signature >>", signature)
-  document.getElementById("dummy_signature").innerHTML = signature;
-  insert_signature(signature);
+  // document.getElementById("dummy_signature").innerHTML = signature;
+  // insert_signature(signature);
   save_signature_settings();
 }
 

@@ -14,13 +14,13 @@ function checkSignature(eventObj) {
   let user_info_str = Office.context.roamingSettings.get("user_info");
   console.log("Autorun process",user_info_str)
   if (!user_info_str) {
-    let userEmail = Office.context.mailbox ? Office.context.mailbox.userProfile.emailAddress : "Unknown User";
-    let user_info = {
-        name: userEmail.split("@")[0], 
-        email: userEmail
-    };
-    // localStorage.setItem('user_info', JSON.stringify(user_info));
-    console.log("User Info:", user_info);
+    // let userEmail = Office.context.mailbox ? Office.context.mailbox.userProfile.emailAddress : "Unknown User";
+    // let user_info = {
+    //     name: userEmail.split("@")[0], 
+    //     email: userEmail
+    // };
+    // // localStorage.setItem('user_info', JSON.stringify(user_info));
+    // console.log("User Info:", user_info);
     display_insight_infobar();
   } else {
     let user_info = JSON.parse(user_info_str);
