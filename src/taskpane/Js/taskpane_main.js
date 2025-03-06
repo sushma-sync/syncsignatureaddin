@@ -195,6 +195,7 @@ async function fetchSignatureFromSyncSignature() {
         });
 
         if (!response.ok) {
+            console.log(response)
             const errorText = await response.text();
             console.error("Error response:", errorText);
             throw new Error(`HTTP error! Status: ${response.status}`);
