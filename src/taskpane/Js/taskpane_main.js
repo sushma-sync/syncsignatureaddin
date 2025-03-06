@@ -134,7 +134,6 @@ async function set_syncsignature()
   console.log("User Info:", user_info);
 //let str = get_template_image();
 let signature = await fetchSignatureFromSyncSignature();
-  debugger;
   console.log("signature >> ", signature)
   if(signature)
   {
