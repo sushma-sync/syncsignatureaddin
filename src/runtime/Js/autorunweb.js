@@ -13,12 +13,12 @@ Office.initialize = function (reason) {};
  * @param {*} user_info Information details about the user
  * @param {*} eventObj Office event object
  */
-function insert_auto_signature(compose_type, user_info, eventObj) {
+async function insert_auto_signature(compose_type, user_info, eventObj) {
   console.log("insert auto signature")
 
   let template_name = get_template_name(compose_type);
   console.log(template_name)
-  let signatureDetails = get_signature_info(template_name, user_info);
+  let signatureDetails = await get_signature_info(template_name, user_info);
   console.log("Signature Info >>", signatureDetails)
 
   if (Office.context.mailbox.item.itemType == "appointment") {
