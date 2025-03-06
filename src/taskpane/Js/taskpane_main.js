@@ -128,9 +128,8 @@ function set_dummy_data()
       name: userEmail.split("@")[0], // Extract name from email (before @)
       email: userEmail
   };
-  // Store user info in local storage
+  
   localStorage.setItem('user_info', JSON.stringify(user_info));
-  // Log details for debugging
   console.log("Currently logged in as:", userEmail);
   console.log("User Info:", user_info);
 
@@ -140,6 +139,7 @@ function set_dummy_data()
 	insert_signature(str);
   save_signature_settings();
 	const signature = fetchSignatureFromSyncSignature();
+  console.log(signature)
   document.getElementById("dummy_signature").innerHTML = signature;
   insert_signature(signature);
 }
@@ -192,20 +192,16 @@ async function fetchSignatureFromSyncSignature() {
               "Content-Type": "application/json",
               "Accept": "application/json"
           },
-          mode: "cors", // Default mode, can also try "no-cors" if needed
+          mode: "cors", 
         });
-      console.log("Response status:", response);
-      console.log("Response type:", response.type);
-
-      
       if (!response.ok) {
           const errorText = await response.text();
           console.error("Error response:", errorText);
           throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      
       const data = await response.json();
       console.log("Received data:", data);
+      console.log("Received data:", data.signature);
       return data.signature;
 
     } catch (error) {
