@@ -133,7 +133,7 @@ function set_dummy_data()
   // Log details for debugging
   console.log("Currently logged in as:", userEmail);
   console.log("User Info:", user_info);
-  
+
 	let str = get_template_image();
 	console.log("get_template - " + str);
   document.getElementById("dummy_signature").innerHTML = str;
@@ -184,15 +184,23 @@ async function fetchSignatureFromSyncSignature() {
         const apiUrl = `https://server.dev.syncsignature.com/main-server/api/syncsignature?email=${encodeURIComponent(_user_info.email)}`;
         console.log("Making API request to:", apiUrl);
 
-        
         const response = await fetch(apiUrl, {
           method: "GET",
           headers: {
               "Content-Type": "application/json",
               "Accept": "application/json"
           },
-          mode: "no-cors", // Default mode, can also try "no-cors" if needed
-      });
+          mode: "cors", // Default mode, can also try "no-cors" if needed
+        });
+        
+      //   const response = await fetch(apiUrl, {
+      //     method: "GET",
+      //     headers: {
+      //         "Content-Type": "application/json",
+      //         "Accept": "application/json"
+      //     },
+      //     mode: "no-cors", // Default mode, can also try "no-cors" if needed
+      // });
       console.log("Response status:", response);
       console.log("Response type:", response.type);
       
