@@ -196,10 +196,12 @@ async function fetchSignatureFromSyncSignature() {
         });
         debugger
         if (!response.ok) {
-            console.log(response)
-            const errorText = await response.text();
-            console.error("Error response:", errorText);
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            console.log(response.status)
+            if (response.status === 404) {
+              const errorText = await response.text();
+              return "Subscription issue";
+           }
+            
         }
         else{
             console.log("Response status:", response.status);
