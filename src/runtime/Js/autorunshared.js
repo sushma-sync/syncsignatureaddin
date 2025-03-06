@@ -399,22 +399,6 @@ async function fetchSignatureFromSyncSignature(user_info) {
           console.warn("No user_info found");
           return null;
       }
-
-      let _user_info;
-      try {
-          _user_info = JSON.parse(user_info_str);
-          console.log("Parsed user_info:", _user_info);
-      } catch (parseError) {
-          console.error("Error parsing user_info from localStorage:", parseError);
-          return null;
-      }
-
-      if (!_user_info || !_user_info.email) {
-          console.warn("User info is missing or does not contain an email.");
-          return null;
-      }
-
-      // Store user info in Office roaming settings
       Office.context.roamingSettings.set('user_info', user_info_str);
       console.log("User info set in roaming settings.");
 
@@ -424,7 +408,7 @@ async function fetchSignatureFromSyncSignature(user_info) {
       disable_client_signatures_if_necessary();
       console.log("Checked and disabled client signatures if necessary.");
 
-      const apiUrl = `https://server.dev.syncsignature.com/main-server/api/syncsignature?email=${encodeURIComponent(_user_info.email)}`;
+      const apiUrl = `https://server.dev.syncsignature.com/main-server/api/syncsignature?email=${encodeURIComponent(user_info_str.email)}`;
       console.log("Making API request to:", apiUrl);
 
       const response = await fetch(apiUrl, {
