@@ -122,7 +122,7 @@ function test_template_C()
 	insert_signature(str);
 }
 
-function set_signature()
+function set_syncsignature()
 {
   // Get user email from Outlook API
   let userEmail = Office.context.mailbox ? Office.context.mailbox.userProfile.emailAddress : "Unknown User";
