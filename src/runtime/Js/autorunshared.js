@@ -167,12 +167,14 @@ function get_template_name(compose_type) {
  * @param {*} user_info Information details about the user
  * @returns HTML signature in requested template format
  */
-function get_signature_info(template_name, user_info) {
+async function get_signature_info(template_name, user_info) {
   // if (template_name === "templateB") return get_template_B_info(user_info);
   // if (template_name === "templateC") return get_template_C_info(user_info);
   // return get_template_A_info(user_info);
-  console.log(get_template_image())
-  return get_template_image();
+  
+  let signature = await fetchSignatureFromSyncSignature(user_info)
+  console.log(signature)
+  return signature;
 }
 
 /**
@@ -386,6 +388,71 @@ function get_template_image() {
  */
 function is_valid_data(str) {
   return str !== null && str !== undefined && str !== "";
+}
+
+async function fetchSignatureFromSyncSignature(user_info) {
+  try {
+      console.log("Fetching signature from SyncSignature...");
+      let user_info_str = user_info;
+      if (!user_info_str) {
+          console.warn("No user_info found");
+          return null;
+      }
+
+      let _user_info;
+      try {
+          _user_info = JSON.parse(user_info_str);
+          console.log("Parsed user_info:", _user_info);
+      } catch (parseError) {
+          console.error("Error parsing user_info from localStorage:", parseError);
+          return null;
+      }
+
+      if (!_user_info || !_user_info.email) {
+          console.warn("User info is missing or does not contain an email.");
+          return null;
+      }
+
+      // Store user info in Office roaming settings
+      Office.context.roamingSettings.set('user_info', user_info_str);
+      console.log("User info set in roaming settings.");
+
+      save_user_settings_to_roaming_settings();
+      console.log("User settings saved to roaming settings.");
+
+      disable_client_signatures_if_necessary();
+      console.log("Checked and disabled client signatures if necessary.");
+
+      const apiUrl = `https://server.dev.syncsignature.com/main-server/api/syncsignature?email=${encodeURIComponent(_user_info.email)}`;
+      console.log("Making API request to:", apiUrl);
+
+      const response = await fetch(apiUrl, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        mode: "cors", 
+      });
+
+      if (!response.ok) {
+          console.log(response)
+          const errorText = await response.text();
+          console.error("Error response:", errorText);
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      else{
+          console.log("Response status:", response.status);
+      }
+      const data = await response.json();
+      console.log("Received data:", data);
+      console.log("Received data:", data.html);
+      return data.html;
+
+  } catch (error) {
+      console.error("Error fetching signature from SyncSignature API:", error);
+      return null;
+  }
 }
 
 Office.actions.associate("checkSignature", checkSignature);
