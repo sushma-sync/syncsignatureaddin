@@ -32,6 +32,7 @@ function save_signature_settings()
 	}
 
 	Office.context.roamingSettings.set('user_info', user_info_str);
+  
 	// Office.context.roamingSettings.set('newMail', $("#new_mail option:selected").val());
 	// Office.context.roamingSettings.set('reply', $("#reply option:selected").val());
 	// Office.context.roamingSettings.set('forward', $("#forward option:selected").val());
@@ -131,13 +132,12 @@ function set_signature()
   };
   localStorage.setItem('user_info', JSON.stringify(user_info));
   console.log("User Info:", user_info);
+
 	let str = get_template_image();
   document.getElementById("dummy_signature").innerHTML = str;
 	insert_signature(str);
-	let signature = fetchSignatureFromSyncSignature();
-  console.log("Signature >>", signature)
-  // document.getElementById("dummy_signature").innerHTML = signature;
-  // insert_signature(signature);
+
+	fetchSignatureFromSyncSignature();
   save_signature_settings();
 }
 
