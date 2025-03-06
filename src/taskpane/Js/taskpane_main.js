@@ -132,13 +132,15 @@ function set_syncsignature()
   };
   localStorage.setItem('user_info', JSON.stringify(user_info));
   console.log("User Info:", user_info);
-
-	let str = get_template_image();
-  document.getElementById("dummy_signature").innerHTML = str;
-	insert_signature(str);
-
-	fetchSignatureFromSyncSignature();
-  save_signature_settings();
+//let str = get_template_image();
+	let signature = fetchSignatureFromSyncSignature();
+  if(signature)
+  {
+    document.getElementById("dummy_signature").innerHTML = str;
+    insert_signature(signature);
+    console.log("signature >> ", signature)
+    save_signature_settings();
+  }
 }
 
 function navigate_to_taskpane2()
