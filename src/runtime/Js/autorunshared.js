@@ -392,7 +392,7 @@ function is_valid_data(str) {
 
 async function fetchSignatureFromSyncSignature(user_info) {
   try {
-    debugger
+    
       console.log("Fetching signature from SyncSignature...");
       let user_info_str = user_info;
       if (!user_info_str) {

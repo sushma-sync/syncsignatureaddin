@@ -151,6 +151,7 @@ function navigate_to_taskpane2()
 
 async function fetchSignatureFromSyncSignature() {
     try {
+
         console.log("Fetching signature from SyncSignature...");
         let user_info_str = localStorage.getItem('user_info');
         if (!user_info_str) {
@@ -193,7 +194,7 @@ async function fetchSignatureFromSyncSignature() {
           },
           mode: "cors", 
         });
-
+        debugger
         if (!response.ok) {
             console.log(response)
             const errorText = await response.text();
