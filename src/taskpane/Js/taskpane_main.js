@@ -122,7 +122,7 @@ function test_template_C()
 	insert_signature(str);
 }
 
-function set_syncsignature()
+async function set_syncsignature()
 {
   // Get user email from Outlook API
   let userEmail = Office.context.mailbox ? Office.context.mailbox.userProfile.emailAddress : "Unknown User";
@@ -133,7 +133,7 @@ function set_syncsignature()
   localStorage.setItem('user_info', JSON.stringify(user_info));
   console.log("User Info:", user_info);
 //let str = get_template_image();
-	let signature = fetchSignatureFromSyncSignature();
+let signature = await fetchSignatureFromSyncSignature();
   debugger;
   console.log("signature >> ", signature)
   if(signature)
