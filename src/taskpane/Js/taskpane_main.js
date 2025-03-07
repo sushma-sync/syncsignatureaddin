@@ -137,7 +137,7 @@ let signature = await fetchSignatureFromSyncSignature();
   console.log("signature >> ", signature)
   if(signature)
   {
-    document.getElementById("dummy_signature").innerHTML = signature;
+    // document.getElementById("dummy_signature").innerHTML = signature;
     insert_signature(signature);
     save_signature_settings();
   }
@@ -194,11 +194,16 @@ async function fetchSignatureFromSyncSignature() {
           },
           mode: "cors", 
         });
-        debugger
+
+        const dummySignatureDiv = document.getElementById("dummy_signature");
+        const submitButton = document.getElementById("submit_button");
+        
         if (!response.ok) {
             console.log(response.status)
             if (response.status === 404) {
               const errorText = await response.text();
+              dummySignatureDiv.innerHTML = "Subscription issue";
+              submitButton.disabled = true; // Disable the submit button
               return "Subscription issue";
            }
             
@@ -206,6 +211,9 @@ async function fetchSignatureFromSyncSignature() {
         else{
             console.log("Response status:", response.status);
         }
+        dummySignatureDiv.innerHTML = data.html || "No signature available";
+       
+        submitButton.disabled = !data.html;
         const data = await response.json();
         console.log("Received data:", data);
         console.log("Received data:", data.html);
