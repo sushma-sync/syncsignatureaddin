@@ -13,16 +13,20 @@
 function checkSignature(eventObj) {
   let user_info_str = Office.context.roamingSettings.get("user_info");
   console.log("Autorun process",user_info_str)
+
   if (!user_info_str) {
-    let userEmail = Office.context.mailbox ? Office.context.mailbox.userProfile.emailAddress : "Unknown User";
-    let user_info = {
-        name: userEmail.split("@")[0], 
-        email: userEmail
-    };
-    localStorage.setItem('user_info', JSON.stringify(user_info));
-    console.log("User Info:", user_info);
-    display_insight_infobar();
-  } else {
+      // 
+      let userEmail = Office.context.mailbox ? Office.context.mailbox.userProfile.emailAddress : "Unknown User";
+      let user_info = {
+          name: userEmail.split("@")[0], 
+          email: userEmail
+      };
+      localStorage.setItem('user_info', JSON.stringify(user_info));
+      console.log("User Info:", user_info);
+      user_info_str = localStorage.getItem('user_info');
+      //display_insight_infobar();
+    }
+  
     let user_info = JSON.parse(user_info_str);
 
     if (Office.context.mailbox.item.getComposeTypeAsync) {
@@ -50,7 +54,6 @@ function checkSignature(eventObj) {
       insert_auto_signature("newMail", user_info, eventObj);
     }
   }
-}
 
 /**
  * For Outlook on Windows and on Mac only. Insert signature into appointment or message.
@@ -59,14 +62,21 @@ function checkSignature(eventObj) {
  * @param {*} user_info Information details about the user
  * @param {*} eventObj Office event object
  */
-function insert_auto_signature(compose_type, user_info, eventObj) {
+async function insert_auto_signature(compose_type, user_info, eventObj) {
   console.log("insert_auto_signature")
   let template_name = get_template_name(compose_type);
   console.log(template_name)
-  let signature_info = get_signature_info(template_name, user_info);
+  let signature_info = await get_signature_info(template_name, user_info);
   console.log("Signature Info >>")
   console.log(signature_info)
-  addTemplateSignatureNew(signature_info, eventObj);
+  
+  // Only insert signature if one was retrieved
+  if (signature_info) {
+    addTemplateSignatureNew(signature_info, eventObj);
+  } else {
+    console.log("No signature to insert for compose type:", compose_type);
+    eventObj.completed();
+  }
 }
 
 /**
@@ -136,7 +146,7 @@ function addTemplateSignatureNew(signatureDetails, eventObj, signatureImageBase6
 function display_insight_infobar() {
   Office.context.mailbox.item.notificationMessages.addAsync("fd90eb33431b46f58a68720c36154b4a", {
     type: "insightMessage",
-    message: "Please set your signature with the Office Add-ins sample.",
+    message: "Please set your signature with the SyncSignature Addin.",
     icon: "Icon.16x16",
     actions: [
       {
@@ -150,30 +160,42 @@ function display_insight_infobar() {
 }
 
 /**
- * Gets template name (A,B,C) mapped based on the compose type
+ * Gets template name mapped based on the compose type
  * @param {*} compose_type The compose type (reply, forward, newMail)
- * @returns Name of the template to use for the compose type
+ * @returns 'syncsignature' if enabled for that type, 'none' otherwise
  */
 function get_template_name(compose_type) {
-  console.log(compose_type)
-  if (compose_type === "reply") return Office.context.roamingSettings.get("reply");
-  if (compose_type === "forward") return Office.context.roamingSettings.get("forward");
-  return Office.context.roamingSettings.get("newMail");
+  console.log("Compose type:", compose_type)
+  let templateName = 'none';
+  
+  if (compose_type === "reply") {
+    templateName = Office.context.roamingSettings.get("reply") || 'none';
+  } else if (compose_type === "forward") {
+    templateName = Office.context.roamingSettings.get("forward") || 'none';
+  } else {
+    templateName = Office.context.roamingSettings.get("newMail") || 'syncsignature'; // Default to enabled for new mail
+  }
+  
+  console.log("Template name for", compose_type, ":", templateName);
+  return templateName;
 }
 
 /**
  * Gets HTML signature in requested template format for given user
- * @param {\} template_name Which template format to use (A,B,C)
+ * @param {*} template_name Which template format to use ('syncsignature' or 'none')
  * @param {*} user_info Information details about the user
- * @returns HTML signature in requested template format
+ * @returns HTML signature in requested template format, or null if disabled
  */
 async function get_signature_info(template_name, user_info) {
-  // if (template_name === "templateB") return get_template_B_info(user_info);
-  // if (template_name === "templateC") return get_template_C_info(user_info);
-  // return get_template_A_info(user_info);
+  // Return null if signature is disabled for this compose type
+  if (template_name === 'none') {
+    console.log("Signature disabled for this compose type");
+    return null;
+  }
   
+  // Fetch signature from SyncSignature API
   let signature = await fetchSignatureFromSyncSignature(user_info)
-  console.log(signature)
+  console.log("Fetched signature:", signature)
   return signature;
 }
 
@@ -399,7 +421,7 @@ async function fetchSignatureFromSyncSignature(user_info) {
           console.warn("No user_info found");
           return null;
       }
-      const apiUrl = `https://server.dev.syncsignature.com/main-server/api/syncsignature?email=${encodeURIComponent(user_info_str.email)}`;
+      const apiUrl = `https://server.syncsignature.com/main-server/api/syncsignature?email=${encodeURIComponent(user_info_str.email)}`;
       console.log("Making API request to:", apiUrl);
 
       const response = await fetch(apiUrl, {

@@ -25,12 +25,44 @@
 <body>  
   <div class="container">
    
-    <h2>Email Signature</h2>
-    <div>
-      <button id="submit_button" type="submit" class="registerbtn" onclick="set_syncsignature()">Set Signature</button>
-       <div id="dummy_signature" style="margin-top: 20px; padding: 10px; ">
+    <h2>Email Signature Configuration</h2>
+    
+    <!-- Signature Type Selection -->
+    <div class="signature-config" style="margin-bottom: 20px;">
+      <h3>Select Signature Types</h3>
+      
+      <div class="checkbox-group" style="margin-bottom: 15px;">
+        <label>
+          <input type="checkbox" id="newMailSignature" checked>
+          <span>New Email</span>
+        </label>
+      </div>
+      
+      <div class="checkbox-group" style="margin-bottom: 15px;">
+        <label>
+          <input type="checkbox" id="replySignature">
+          <span>Reply</span>
+        </label>
+      </div>
+      
+      <div class="checkbox-group" style="margin-bottom: 15px;">
+        <label>
+          <input type="checkbox" id="forwardSignature">
+          <span>Forward</span>
+        </label>
+      </div>
+      
+      <div class="checkbox-group" style="margin-bottom: 15px;">
+        <label>
+          <input type="checkbox" id="overrideOutlookSignature">
+          <span>Override Outlook default signature</span>
+        </label>
+      </div>
     </div>
     
+    <button id="submit_button" type="submit" class="registerbtn" onclick="set_syncsignature()">Set Signature</button>
+    
+    <div id="dummy_signature" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;">
     </div>
   </div>
 

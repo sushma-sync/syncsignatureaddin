@@ -11,7 +11,7 @@ function save_user_settings_to_roaming_settings()
 
 function disable_client_signatures_if_necessary()
 {
-  if ($("#checkbox_sig").prop("checked") === true)
+  if ($("#overrideOutlookSignature").prop("checked") === true)
   {
 	Office.context.mailbox.item.disableClientSignatureAsync(function (asyncResult)
 	{
@@ -33,10 +33,11 @@ function save_signature_settings()
 
 	Office.context.roamingSettings.set('user_info', user_info_str);
   
-	// Office.context.roamingSettings.set('newMail', $("#new_mail option:selected").val());
-	// Office.context.roamingSettings.set('reply', $("#reply option:selected").val());
-	// Office.context.roamingSettings.set('forward', $("#forward option:selected").val());
-	// Office.context.roamingSettings.set('override_olk_signature', $("#checkbox_sig").prop('checked'));
+	// Save signature type preferences
+	Office.context.roamingSettings.set('newMail', $("#newMailSignature").prop('checked') ? 'syncsignature' : 'none');
+	Office.context.roamingSettings.set('reply', $("#replySignature").prop('checked') ? 'syncsignature' : 'none');
+	Office.context.roamingSettings.set('forward', $("#forwardSignature").prop('checked') ? 'syncsignature' : 'none');
+	Office.context.roamingSettings.set('override_olk_signature', $("#overrideOutlookSignature").prop('checked'));
 
 	save_user_settings_to_roaming_settings();
 
@@ -122,6 +123,20 @@ function test_template_C()
 	insert_signature(str);
 }
 
+function load_signature_settings()
+{
+  // Load saved settings and update checkboxes
+  let newMailSetting = Office.context.roamingSettings.get("newMail");
+  let replySetting = Office.context.roamingSettings.get("reply");
+  let forwardSetting = Office.context.roamingSettings.get("forward");
+  let overrideSetting = Office.context.roamingSettings.get("override_olk_signature");
+
+  $("#newMailSignature").prop('checked', newMailSetting === 'syncsignature');
+  $("#replySignature").prop('checked', replySetting === 'syncsignature');
+  $("#forwardSignature").prop('checked', forwardSetting === 'syncsignature');
+  $("#overrideOutlookSignature").prop('checked', overrideSetting === true);
+}
+
 async function set_syncsignature()
 {
   // Get user email from Outlook API
@@ -132,14 +147,21 @@ async function set_syncsignature()
   };
   localStorage.setItem('user_info', JSON.stringify(user_info));
   console.log("User Info:", user_info);
-//let str = get_template_image();
-let signature = await fetchSignatureFromSyncSignature();
+  
+  // Load existing settings first
+  load_signature_settings();
+  
+  //let str = get_template_image();
+  let signature = await fetchSignatureFromSyncSignature();
   console.log("signature >> ", signature)
   if(signature)
   {
-    // document.getElementById("dummy_signature").innerHTML = signature;
-    insert_signature(signature);
+    document.getElementById("dummy_signature").innerHTML = signature;
+    // Only save settings, don't insert signature immediately
     save_signature_settings();
+    
+    // Show success message
+    alert("Signature settings saved successfully! The signature will be applied based on your selected email types.");
   }
 }
 
@@ -183,7 +205,7 @@ async function fetchSignatureFromSyncSignature() {
         disable_client_signatures_if_necessary();
         console.log("Checked and disabled client signatures if necessary.");
 
-        const apiUrl = `https://server.dev.syncsignature.com/main-server/api/syncsignature?email=${encodeURIComponent(_user_info.email)}`;
+        const apiUrl = `https://server.syncsignature.com/main-server/api/syncsignature?email=${encodeURIComponent(_user_info.email)}`;
         console.log("Making API request to:", apiUrl);
 
         const response = await fetch(apiUrl, {
@@ -202,21 +224,21 @@ async function fetchSignatureFromSyncSignature() {
             console.log(response.status)
             if (response.status === 404) {
               const errorText = await response.text();
-              dummySignatureDiv.innerHTML = "Subscription issue";
+              dummySignatureDiv.innerHTML = "Signature Not Configure at SyncSignature";
               submitButton.disabled = true; // Disable the submit button
-              return "Subscription issue";
+              return "Signature Not Configure at SyncSignature";
            }
             
         }
         else{
             console.log("Response status:", response.status);
         }
-        dummySignatureDiv.innerHTML = data.html || "No signature available";
-       
-        submitButton.disabled = !data.html;
+        console.log(response)
         const data = await response.json();
         console.log("Received data:", data);
         console.log("Received data:", data.html);
+        dummySignatureDiv.innerHTML = data.html || "No signature available";
+        submitButton.disabled = !data.html;
         return data.html;
 
     } catch (error) {
@@ -228,6 +250,11 @@ async function fetchSignatureFromSyncSignature() {
 Office.onReady(function() {
   // Register functions
   Office.actions.associate("insertDefaultSignature", insertDefaultSignature);
+  
+  // Load signature settings when page loads
+  $(document).ready(function() {
+    load_signature_settings();
+  });
 });
 function insertDefaultSignature(event) {
   // Get user identity token silently (if already logged in)
