@@ -148,8 +148,12 @@ async function set_syncsignature()
   localStorage.setItem('user_info', JSON.stringify(user_info));
   console.log("User Info:", user_info);
   
-  // Load existing settings first
-  load_signature_settings();
+  // Debug: Log current checkbox states before saving
+  console.log("Checkbox states before saving:");
+  console.log("New Mail:", $("#newMailSignature").prop('checked'));
+  console.log("Reply:", $("#replySignature").prop('checked'));
+  console.log("Forward:", $("#forwardSignature").prop('checked'));
+  console.log("Override:", $("#overrideOutlookSignature").prop('checked'));
   
   //let str = get_template_image();
   let signature = await fetchSignatureFromSyncSignature();
@@ -157,11 +161,24 @@ async function set_syncsignature()
   if(signature)
   {
     document.getElementById("dummy_signature").innerHTML = signature;
-    // Only save settings, don't insert signature immediately
+    
+    // Save settings with debugging
     save_signature_settings();
+    
+    // Debug: Log settings after saving
+    setTimeout(() => {
+      console.log("Settings after saving:");
+      console.log("newMail:", Office.context.roamingSettings.get('newMail'));
+      console.log("reply:", Office.context.roamingSettings.get('reply'));
+      console.log("forward:", Office.context.roamingSettings.get('forward'));
+      console.log("override_olk_signature:", Office.context.roamingSettings.get('override_olk_signature'));
+    }, 1000);
     
     // Show success message
     alert("Signature settings saved successfully! The signature will be applied based on your selected email types.");
+  }
+  else {
+    alert("Failed to fetch signature. Please try again.");
   }
 }
 
