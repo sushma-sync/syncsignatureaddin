@@ -270,8 +270,8 @@ input[type=text]:focus, input[type=number]:focus, input[type=email]:focus {
 .registerbtn, #submit_button {
   position: relative;
   left: 0px;
-  width: 120px;
-  height: 40px;
+  width: 150px;
+  height: 44px;
   color: white;
   background: #7f56d9 0% 0% no-repeat padding-box;
   border: none;
@@ -281,6 +281,10 @@ input[type=text]:focus, input[type=number]:focus, input[type=email]:focus {
   cursor: pointer;
   transition: background-color 0.2s ease;
   margin-top: 10px;
+  padding: 10px 16px;
+  display: inline-block;
+  text-align: center;
+  line-height: 1.2;
 }
 
 .registerbtn:hover, #submit_button:hover {
