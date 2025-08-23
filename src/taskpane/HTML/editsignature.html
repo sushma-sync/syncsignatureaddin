@@ -19,7 +19,7 @@
   <script type="text/javascript" src="../Js/signature_templates.js"></script>
   <script type="text/javascript" src="../Js/signature_loader.js"></script>
   <script type="text/javascript" src="../Js/taskpane_main.js"></script>
-</head>
+  <script type="text/javascript" src="../Js/signature_selection.js"></script>
 </head>
 
 <body>  
@@ -27,36 +27,58 @@
    
     <h2>Email Signature Configuration</h2>
     
-    <!-- Signature Type Selection -->
-    <div class="signature-config" style="margin-bottom: 20px;">
-      <h3>Select Signature Types</h3>
+    <!-- Where to set signature section -->
+    <div class="signature-selection-section">
+      <h3 class="section-title">Where to set signature</h3>
+      <p class="section-description">Select the email types where you want to apply your signature</p>
       
-      <div class="checkbox-group" style="margin-bottom: 15px;">
-        <label>
-          <input type="checkbox" id="newMailSignature" checked>
-          <span>New Email</span>
-        </label>
+      <div class="signature-options">
+        <div class="option-card" id="newEmailCard">
+          <div class="option-header">
+            <input type="checkbox" id="newMailSignature" checked>
+            <label for="newMailSignature" class="option-title">New Email</label>
+            <span class="checkmark">✓</span>
+          </div>
+          <p class="option-description">Apply signature to new email messages</p>
+        </div>
+        
+        <div class="option-card" id="replyCard">
+          <div class="option-header">
+            <input type="checkbox" id="replySignature">
+            <label for="replySignature" class="option-title">Reply</label>
+            <span class="checkmark">✓</span>
+          </div>
+          <p class="option-description">Apply signature to reply messages</p>
+        </div>
+        
+        <div class="option-card" id="forwardCard">
+          <div class="option-header">
+            <input type="checkbox" id="forwardSignature">
+            <label for="forwardSignature" class="option-title">Forward</label>
+            <span class="checkmark">✓</span>
+          </div>
+          <p class="option-description">Apply signature to forwarded messages</p>
+        </div>
+        
+        <div class="option-card" id="overrideCard">
+          <div class="option-header">
+            <input type="checkbox" id="overrideOutlookSignature">
+            <label for="overrideOutlookSignature" class="option-title">Override Outlook Default</label>
+            <span class="checkmark">✓</span>
+          </div>
+          <p class="option-description">Replace Outlook's default signature</p>
+        </div>
       </div>
-      
-      <div class="checkbox-group" style="margin-bottom: 15px;">
-        <label>
-          <input type="checkbox" id="replySignature">
-          <span>Reply</span>
-        </label>
-      </div>
-      
-      <div class="checkbox-group" style="margin-bottom: 15px;">
-        <label>
-          <input type="checkbox" id="forwardSignature">
-          <span>Forward</span>
-        </label>
-      </div>
-      
-      <div class="checkbox-group" style="margin-bottom: 15px;">
-        <label>
-          <input type="checkbox" id="overrideOutlookSignature">
-          <span>Override Outlook default signature</span>
-        </label>
+    </div>
+    
+    <!-- Selected signature display section -->
+    <div class="selected-signature-section" id="selectedSignatureSection">
+      <h3 class="section-title">Your Selected Configuration</h3>
+      <div class="selected-options" id="selectedOptions">
+        <div class="selected-item active" id="selectedNewEmail">
+          <span class="selected-icon">✓</span>
+          <span class="selected-text">New Email</span>
+        </div>
       </div>
     </div>
     

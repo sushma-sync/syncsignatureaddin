@@ -3,17 +3,16 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
   xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="MailApp">
-  <Id>C341AD31-BF7A-4C1D-99F1-D2E5896BEB0B</Id>
-   <Version>1.0.0.1</Version>
-  <ProviderName>SyncSignature</ProviderName>
+  <Id>C341AD31-BF7A-4C1D-99F1-D2E5896BEB1B</Id>
+   <Version>1.0.0.3</Version>
+  <ProviderName>XMOMENTUM TECHNOLOGIES PRIVATE LIMITED</ProviderName>
   <DefaultLocale>en-us</DefaultLocale>
   <DisplayName DefaultValue="SyncSignature"/>
   <Description DefaultValue="Outlook Add-In: Effortlessly design and centrally control email signatures for all Microsoft 365 users."/>
-  <IconUrl DefaultValue="https://localhost:3001/assets/final_logo.png"/>
-  <HighResolutionIconUrl DefaultValue="https://localhost:3001/assets/final_logo.png"/>
+  <IconUrl DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/assets/final_logo.png"/>
+  <HighResolutionIconUrl DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/assets/final_logo.png"/>
   <SupportUrl DefaultValue="https://syncsignature.com/blog"/>
   <AppDomains>
-    <AppDomain>https://localhost:3001</AppDomain>
     <AppDomain>https://syncsignature.com</AppDomain>
     <AppDomain>https://sushma-sync.github.io</AppDomain>
   </AppDomains>
@@ -28,7 +27,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://localhost:3001/editsignature.html"/>
+        <SourceLocation DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/src/manifest_sync.xml"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
@@ -121,12 +120,12 @@
       </Hosts>
       <Resources>
         <bt:Images>
-          <bt:Image id="Icon16x16" DefaultValue="https://localhost:3001/assets/final_logo.png"></bt:Image>
+          <bt:Image id="Icon16x16" DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/assets/final_logo.png"></bt:Image>
         </bt:Images>
         <bt:Urls>
-          <bt:Url id="residUrl0" DefaultValue="https://localhost:3001/editsignature.html"></bt:Url>
-          <bt:Url id="Autorun" DefaultValue="https://localhost:3001/autorunweb.html"></bt:Url>
-          <bt:Url id="runtimeJs" DefaultValue="https://localhost:3001/autorunshared.js"></bt:Url>
+          <bt:Url id="residUrl0" DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/src/taskpane/HTML/editsignature.html"></bt:Url>
+          <bt:Url id="Autorun" DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/src/runtime/HTML/autorunweb.html"></bt:Url>
+          <bt:Url id="runtimeJs" DefaultValue="https://sushma-sync.github.io/syncsignatureaddin/src/runtime/js/autorunshared.js"></bt:Url>
         </bt:Urls>
         <bt:ShortStrings>
           <bt:String id="residGL0" DefaultValue="Signature Injector"></bt:String>

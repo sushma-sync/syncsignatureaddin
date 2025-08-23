@@ -126,3 +126,171 @@ input[type=text]:focus, input[type=number]:focus, input[type=email]:focus {
 .checkbox-group span {
   flex: 1;
 }
+
+/* New signature selection styles */
+.signature-selection-section {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  margin-bottom: 25px;
+}
+
+.section-title {
+  color: #424242;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.section-description {
+  color: #6c757d;
+  font-size: 14px;
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+
+.signature-options {
+  display: grid;
+  gap: 12px;
+}
+
+.option-card {
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  padding: 16px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.option-card:hover {
+  border-color: #ced4da;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.option-card.selected {
+  border-color: #7f56d9;
+  background-color: #f8f6ff;
+}
+
+.option-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.option-card input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0 12px 0 0;
+  cursor: pointer;
+  accent-color: #7f56d9;
+}
+
+.option-title {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 500;
+  color: #424242;
+  cursor: pointer;
+  margin: 0;
+}
+
+.option-description {
+  color: #6c757d;
+  font-size: 13px;
+  margin: 0;
+  margin-left: 30px;
+}
+
+.checkmark {
+  color: #7f56d9;
+  font-weight: bold;
+  font-size: 18px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.option-card.selected .checkmark {
+  opacity: 1;
+}
+
+/* Selected signature display section */
+.selected-signature-section {
+  background-color: #fff;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.selected-signature-section .section-title {
+  margin-bottom: 15px;
+}
+
+.selected-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.selected-item {
+  display: flex;
+  align-items: center;
+  background-color: #f8f6ff;
+  border: 1px solid #7f56d9;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #424242;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.3s ease;
+}
+
+.selected-item.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.selected-icon {
+  color: #7f56d9;
+  font-weight: bold;
+  margin-right: 6px;
+  font-size: 12px;
+}
+
+.selected-text {
+  font-weight: 500;
+}
+
+/* Enhanced submit button */
+.registerbtn, #submit_button {
+  position: relative;
+  left: 0px;
+  width: 120px;
+  height: 40px;
+  color: white;
+  background: #7f56d9 0% 0% no-repeat padding-box;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 10px;
+}
+
+.registerbtn:hover, #submit_button:hover {
+  background-color: #6b46c1;
+}
+
+/* Empty state for selected options */
+.selected-options:empty::after {
+  content: "No signature types selected";
+  color: #6c757d;
+  font-style: italic;
+  font-size: 14px;
+}

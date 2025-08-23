@@ -24,7 +24,7 @@
     "signin": "office-addin-dev-settings m365-account login",
     "signout": "office-addin-dev-settings m365-account logout",
     "prettier": "office-addin-lint prettier",
-    "start": "office-addin-debugging start manifest.json --app outlook",
+    "start": "office-addin-debugging start manifest_sync.xml --app outlook",
     "start:prod": "office-addin-dev-settings sideload ./dist/manifest.json --app outlook",
     "start:xml": "office-addin-debugging start manifest-localhost.xml --app outlook",
     "stop": "office-addin-debugging stop manifest.json",
@@ -32,8 +32,8 @@
     "validate:xml": "office-addin-manifest validate manifest.xml"
   },
   "dependencies": {
-    "core-js": "^3.37.1",
     "@azure/msal-browser": "^3.27.0",
+    "core-js": "^3.37.1",
     "regenerator-runtime": "^0.14.1"
   },
   "devDependencies": {
@@ -58,9 +58,9 @@
     "os-browserify": "^0.3.0",
     "process": "^0.11.10",
     "source-map-loader": "^5.0.0",
-    "webpack": "^5.92.1",
+    "webpack": "^5.101.3",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "5.0.4"
+    "webpack-dev-server": "^5.2.2"
   },
   "prettier": "office-addin-prettier-config",
   "browserslist": [
