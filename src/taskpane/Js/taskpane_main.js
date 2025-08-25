@@ -33,11 +33,20 @@ function save_signature_settings()
 
 	Office.context.roamingSettings.set('user_info', user_info_str);
   
-	// Save signature type preferences
+	// Save signature type preferences to both roaming settings and localStorage
 	Office.context.roamingSettings.set('newMail', $("#newMailSignature").prop('checked') ? 'syncsignature' : 'none');
 	Office.context.roamingSettings.set('reply', $("#replySignature").prop('checked') ? 'syncsignature' : 'none');
 	Office.context.roamingSettings.set('forward', $("#forwardSignature").prop('checked') ? 'syncsignature' : 'none');
 	Office.context.roamingSettings.set('override_olk_signature', $("#overrideOutlookSignature").prop('checked'));
+
+	// Also save to localStorage for persistence
+	let signature_preferences = {
+		newMail: $("#newMailSignature").prop('checked'),
+		reply: $("#replySignature").prop('checked'),
+		forward: $("#forwardSignature").prop('checked'),
+		override_olk_signature: $("#overrideOutlookSignature").prop('checked')
+	};
+	localStorage.setItem('signature_preferences', JSON.stringify(signature_preferences));
 
 	save_user_settings_to_roaming_settings();
 
@@ -125,24 +134,45 @@ function test_template_C()
 
 function load_signature_settings()
 {
-  // Load saved settings and update checkboxes
+  // First, try to load from localStorage
+  let stored_preferences = localStorage.getItem('signature_preferences');
+  let preferences = null;
+  
+  if (stored_preferences) {
+    try {
+      preferences = JSON.parse(stored_preferences);
+      console.log("Loaded preferences from localStorage:", preferences);
+    } catch (e) {
+      console.error("Error parsing stored preferences:", e);
+    }
+  }
+  
+  // Load saved settings from roaming settings
   let newMailSetting = Office.context.roamingSettings.get("newMail");
   let replySetting = Office.context.roamingSettings.get("reply");
   let forwardSetting = Office.context.roamingSettings.get("forward");
   let overrideSetting = Office.context.roamingSettings.get("override_olk_signature");
 
-  // Set defaults for first-time users
-  if (newMailSetting === null || newMailSetting === undefined) {
-    newMailSetting = 'syncsignature';
-    Office.context.roamingSettings.set('newMail', newMailSetting);
-  }
-  if (replySetting === null || replySetting === undefined) {
-    replySetting = 'syncsignature';
-    Office.context.roamingSettings.set('reply', replySetting);
-  }
-  if (forwardSetting === null || forwardSetting === undefined) {
-    forwardSetting = 'syncsignature';
-    Office.context.roamingSettings.set('forward', forwardSetting);
+  // Use localStorage preferences if available, otherwise use roaming settings or defaults
+  if (preferences) {
+    newMailSetting = preferences.newMail ? 'syncsignature' : 'none';
+    replySetting = preferences.reply ? 'syncsignature' : 'none';
+    forwardSetting = preferences.forward ? 'syncsignature' : 'none';
+    overrideSetting = preferences.override_olk_signature;
+  } else {
+    // Set defaults for first-time users if no roaming settings exist
+    if (newMailSetting === null || newMailSetting === undefined) {
+      newMailSetting = 'syncsignature';
+      Office.context.roamingSettings.set('newMail', newMailSetting);
+    }
+    if (replySetting === null || replySetting === undefined) {
+      replySetting = 'syncsignature';
+      Office.context.roamingSettings.set('reply', replySetting);
+    }
+    if (forwardSetting === null || forwardSetting === undefined) {
+      forwardSetting = 'syncsignature';
+      Office.context.roamingSettings.set('forward', forwardSetting);
+    }
   }
   
   // Save defaults if they were set
@@ -166,6 +196,16 @@ async function set_syncsignature()
   };
   localStorage.setItem('user_info', JSON.stringify(user_info));
   console.log("User Info:", user_info);
+  
+  // Store signature preferences in localStorage
+  let signature_preferences = {
+      newMail: $("#newMailSignature").prop('checked'),
+      reply: $("#replySignature").prop('checked'),
+      forward: $("#forwardSignature").prop('checked'),
+      override_olk_signature: $("#overrideOutlookSignature").prop('checked')
+  };
+  localStorage.setItem('signature_preferences', JSON.stringify(signature_preferences));
+  console.log("Signature Preferences:", signature_preferences);
   
   // Ensure default settings are applied if this is the first time or no settings exist
   let newMailSetting = Office.context.roamingSettings.get("newMail");

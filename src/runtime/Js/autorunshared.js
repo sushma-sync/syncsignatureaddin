@@ -64,8 +64,36 @@ function checkSignature(eventObj) {
  */
 async function insert_auto_signature(compose_type, user_info, eventObj) {
   console.log("insert_auto_signature")
+  
+  // Check if we should override Outlook signatures
+  let shouldOverride = false;
+  let stored_preferences = localStorage.getItem('signature_preferences');
+  
+  if (stored_preferences) {
+    try {
+      let preferences = JSON.parse(stored_preferences);
+      shouldOverride = preferences.override_olk_signature || false;
+      console.log("Override Outlook signature setting:", shouldOverride);
+    } catch (e) {
+      console.error("Error parsing preferences for override setting:", e);
+      // Fallback to roaming settings
+      shouldOverride = Office.context.roamingSettings.get("override_olk_signature") || false;
+    }
+  } else {
+    // Fallback to roaming settings
+    shouldOverride = Office.context.roamingSettings.get("override_olk_signature") || false;
+  }
+  
+  // Disable client signatures if override is enabled
+  if (shouldOverride) {
+    console.log("Disabling client signature as per user preference");
+    Office.context.mailbox.item.disableClientSignatureAsync(function (asyncResult) {
+      console.log("Client signature disable result:", asyncResult);
+    });
+  }
+  
   let template_name = get_template_name(compose_type);
-  console.log(template_name)
+  console.log("Template name to use:", template_name)
   let signature_info = await get_signature_info(template_name, user_info);
   console.log("Signature Info >>")
   console.log(signature_info)
@@ -168,13 +196,45 @@ function get_template_name(compose_type) {
   console.log("Compose type:", compose_type)
   let templateName = 'none';
   
-  if (compose_type === "reply") {
-    templateName = Office.context.roamingSettings.get("reply") || 'none';
-  } else if (compose_type === "forward") {
-    templateName = Office.context.roamingSettings.get("forward") || 'none';
-  } else {
-    templateName = 'syncsignature'; 
+  // First, try to get preferences from localStorage
+  let stored_preferences = localStorage.getItem('signature_preferences');
+  let preferences = null;
+  
+  if (stored_preferences) {
+    try {
+      preferences = JSON.parse(stored_preferences);
+      console.log("Using localStorage preferences:", preferences);
+      
+      // Use localStorage preferences
+      if (compose_type === "reply") {
+        templateName = preferences.reply ? 'syncsignature' : 'none';
+      } else if (compose_type === "forward") {
+        templateName = preferences.forward ? 'syncsignature' : 'none';
+      } else {
+        // For newMail and other types
+        templateName = preferences.newMail ? 'syncsignature' : 'none';
+      }
+      
+    } catch (e) {
+      console.error("Error parsing stored preferences:", e);
+      preferences = null;
+    }
   }
+  
+  // Fallback to roaming settings if no localStorage preferences
+  if (!preferences) {
+    console.log("Using roaming settings fallback");
+    if (compose_type === "reply") {
+      templateName = Office.context.roamingSettings.get("reply") || 'none';
+    } else if (compose_type === "forward") {
+      templateName = Office.context.roamingSettings.get("forward") || 'none';
+    } else {
+      // For newMail, default to syncsignature if not explicitly set
+      let newMailSetting = Office.context.roamingSettings.get("newMail");
+      templateName = (newMailSetting === 'none') ? 'none' : 'syncsignature';
+    }
+  }
+  
   console.log("Template name for", compose_type, ":", templateName);
   return templateName;
 }
