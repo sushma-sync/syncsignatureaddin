@@ -138,12 +138,23 @@
 
     <button id="submit_button" type="submit" class="registerbtn" onclick="set_syncsignature()">Set Signature</button>
     
-    <!-- Signin prompt section (hidden by default) -->
-    <div id="signin_prompt" class="signin-prompt" style="display: none; margin-top: 20px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 4px; text-align: center;">
+    <!-- Selected signature configuration display -->
+    <div id="selectedConfigurationSection" style="display: none; margin-top: 20px; padding: 15px; background-color: #f3f2f1; border-radius: 4px;">
+      <h4 style="margin: 0 0 10px 0; color: #323130; font-size: 14px;">Your Selected Configuration:</h4>
+      <div id="selectedOptions" style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <!-- Selected options will be populated here -->
+      </div>
+    </div>
+    
+    <!-- Signin prompt section (shown by default) -->
+    <div id="signin_prompt" class="signin-prompt" style="display: block; margin-top: 20px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 4px; text-align: center;">
       <div class="signin-content">
         <h3>Sign In Required</h3>
         <p>Don't have a Syncsignature account? Sign in</p>
-        <button id="signin_button" class="signin-btn" onclick="openSigninPage()" style="background-color: #0078d4; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Sign In to SyncSignature</button>
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+          <button id="signin_button" class="signin-btn" onclick="openSigninPage()" style="background-color: #0078d4; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Sign In to SyncSignature</button>
+          <button id="retry_button" class="retry-btn" onclick="retryFetchSignature()" style="background-color: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Retry</button>
+        </div>
       </div>
     </div>
     

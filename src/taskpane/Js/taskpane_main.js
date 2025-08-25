@@ -209,6 +209,9 @@ async function set_syncsignature()
         signatureSelectionSection.style.display = "block";
     }
     
+    // Update selected configuration display
+    updateSelectedConfiguration();
+    
     // Show success message
     const messageElement = document.getElementById("message");
     if (messageElement) {
@@ -286,8 +289,11 @@ async function fetchSignatureFromSyncSignature() {
         if (!response.ok) {
             console.log(response.status)
             if (response.status === 404) {
-              // Show signin prompt instead of just displaying error
-              showSigninPrompt();
+              // Keep signin prompt visible (should already be shown)
+              const signinPrompt = document.getElementById("signin_prompt");
+              if (signinPrompt) {
+                  signinPrompt.style.display = "block";
+              }
               dummySignatureDiv.innerHTML = "";
               submitButton.disabled = true;
               return null;
@@ -312,13 +318,23 @@ async function fetchSignatureFromSyncSignature() {
         }
         
         dummySignatureDiv.innerHTML = data.html || "No signature available";
-        submitButton.disabled = !data.html;
+        submitButton.disabled = false;
         return data.html;
 
     } catch (error) {
         console.error("Error fetching signature from SyncSignature API:", error);
-        // Show signin prompt on error
-        showSigninPrompt();
+        // Keep signin prompt visible on error (it should already be shown by default)
+        const signinPrompt = document.getElementById("signin_prompt");
+        if (signinPrompt) {
+            signinPrompt.style.display = "block";
+        }
+        
+        // Ensure button stays disabled when there's an error
+        const submitButton = document.getElementById("submit_button");
+        if (submitButton) {
+            submitButton.disabled = true;
+        }
+        
         return null;
     }
 }
@@ -334,17 +350,20 @@ function showSigninPrompt() {
         signinPrompt.style.display = "block";
     }
     
+    // Show signature selection section when showing signin prompt so user can still configure
+    if (signatureSelectionSection) {
+        signatureSelectionSection.style.display = "block";
+    }
+    
     // Hide other sections when showing signin prompt
     if (selectedSignatureSection) {
         selectedSignatureSection.style.display = "none";
     }
     
-    if (signatureSelectionSection) {
-        signatureSelectionSection.style.display = "none";
-    }
-    
+    // Keep submit button visible but disabled when signin is required
     if (submitButton) {
-        submitButton.style.display = "none";
+        submitButton.style.display = "inline-block";
+        submitButton.disabled = true;
     }
 }
 
@@ -369,6 +388,7 @@ function hideSigninPrompt() {
     
     if (submitButton) {
         submitButton.style.display = "inline-block";
+        submitButton.disabled = false;
     }
 }
 
@@ -378,9 +398,57 @@ function openSigninPage() {
 }
 
 function retryFetchSignature() {
-    // Hide signin prompt and retry fetching signature
-    hideSigninPrompt();
-    set_syncsignature();
+    // Keep the signin prompt visible while retrying
+    console.log("Retrying signature fetch...");
+    
+    // Set user info again in case it's missing
+    let userEmail = Office.context.mailbox ? Office.context.mailbox.userProfile.emailAddress : "Unknown User";
+    let user_info = {
+        name: userEmail.split("@")[0], 
+        email: userEmail
+    };
+    localStorage.setItem('user_info', JSON.stringify(user_info));
+    
+    // Try fetching signature again
+    fetchSignatureFromSyncSignature();
+}
+
+function updateSelectedConfiguration() {
+    // Use signature_selection.js function if available, otherwise use fallback
+    if (window.signatureSelection && window.signatureSelection.updateSelectedDisplay) {
+        window.signatureSelection.updateSelectedDisplay();
+    } else {
+        // Fallback implementation
+        const selectedOptionsContainer = document.getElementById("selectedOptions");
+        const selectedConfigurationSection = document.getElementById("selectedConfigurationSection");
+        
+        if (!selectedOptionsContainer || !selectedConfigurationSection) return;
+        
+        // Clear previous selections
+        selectedOptionsContainer.innerHTML = "";
+        
+        // Check which options are selected
+        const options = [
+            { id: "newMailSignature", label: "New Email", checked: $("#newMailSignature").prop('checked') },
+            { id: "replySignature", label: "Reply", checked: $("#replySignature").prop('checked') },
+            { id: "forwardSignature", label: "Forward", checked: $("#forwardSignature").prop('checked') }
+        ];
+        
+        let hasSelectedOptions = false;
+        
+        options.forEach(option => {
+            if (option.checked) {
+                hasSelectedOptions = true;
+                const selectedItem = document.createElement("div");
+                selectedItem.style.cssText = "display: inline-flex; align-items: center; background-color: #0078d4; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 500;";
+                selectedItem.innerHTML = `<span style="margin-right: 4px;">✓</span>${option.label}`;
+                selectedOptionsContainer.appendChild(selectedItem);
+            }
+        });
+        
+        // Show or hide the section based on whether there are selected options
+        selectedConfigurationSection.style.display = hasSelectedOptions ? "block" : "none";
+    }
 }
 
 Office.onReady(function() {
@@ -390,6 +458,10 @@ Office.onReady(function() {
   // Load signature settings when page loads
   $(document).ready(function() {
     load_signature_settings();
+    
+    // Start with signin prompt shown and signature options hidden
+    showSigninPrompt();
+    
     // Set user info and try to fetch signature on page load
     let userEmail = Office.context.mailbox ? Office.context.mailbox.userProfile.emailAddress : "Unknown User";
     let user_info = {
@@ -398,6 +470,16 @@ Office.onReady(function() {
     };
     localStorage.setItem('user_info', JSON.stringify(user_info));
     fetchSignatureFromSyncSignature();
+    
+    // Update selected configuration display after settings are loaded
+    setTimeout(() => {
+        updateSelectedConfiguration();
+        
+        // Add event listeners to checkboxes to update display in real-time
+        $("#newMailSignature, #replySignature, #forwardSignature").on('change', function() {
+            updateSelectedConfiguration();
+        });
+    }, 500);
   });
 });
 function insertDefaultSignature(event) {

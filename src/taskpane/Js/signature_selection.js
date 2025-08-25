@@ -48,14 +48,25 @@ function updateCardState(checkbox) {
 
 function updateSelectedDisplay() {
     const selectedOptionsContainer = document.getElementById('selectedOptions');
-    const checkboxes = document.querySelectorAll('.option-card input[type="checkbox"]:checked');
+    const checkboxes = document.querySelectorAll('.option-card input[type="checkbox"]:checked, input[type="checkbox"]:checked');
+    
+    if (!selectedOptionsContainer) return;
     
     // Clear existing selected items
     selectedOptionsContainer.innerHTML = '';
     
     // Add selected items with animation
     checkboxes.forEach((checkbox, index) => {
-        const label = checkbox.closest('.option-card').querySelector('.option-title').textContent;
+        let label;
+        const optionCard = checkbox.closest('.option-card');
+        if (optionCard) {
+            label = optionCard.querySelector('.option-title').textContent;
+        } else {
+            // Fallback for checkboxes not in option-card structure
+            const labelElement = document.querySelector(`label[for="${checkbox.id}"]`);
+            label = labelElement ? labelElement.textContent : checkbox.id.replace('Signature', '').replace(/([A-Z])/g, ' $1').trim();
+        }
+        
         const selectedItem = createSelectedItem(label);
         selectedOptionsContainer.appendChild(selectedItem);
         
@@ -65,22 +76,26 @@ function updateSelectedDisplay() {
         }, index * 100);
     });
     
-    // Show/hide the selected signature section
-    const selectedSection = document.getElementById('selectedSignatureSection');
-    if (checkboxes.length > 0) {
-        selectedSection.style.display = 'block';
-    } else {
-        selectedSection.style.display = 'none';
+    // Show/hide the selected signature section (try both possible element IDs)
+    let selectedSection = document.getElementById('selectedSignatureSection');
+    if (!selectedSection) {
+        selectedSection = document.getElementById('selectedConfigurationSection');
+    }
+    
+    if (selectedSection) {
+        if (checkboxes.length > 0) {
+            selectedSection.style.display = 'block';
+        } else {
+            selectedSection.style.display = 'none';
+        }
     }
 }
 
 function createSelectedItem(text) {
     const selectedItem = document.createElement('div');
     selectedItem.className = 'selected-item';
-    selectedItem.innerHTML = `
-        <span class="selected-icon">✓</span>
-        <span class="selected-text">${text}</span>
-    `;
+    selectedItem.style.cssText = "display: inline-flex; align-items: center; background-color: #0078d4; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 500;";
+    selectedItem.innerHTML = `<span style="margin-right: 4px;">✓</span>${text}`;
     return selectedItem;
 }
 
