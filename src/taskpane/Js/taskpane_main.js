@@ -131,6 +131,25 @@ function load_signature_settings()
   let forwardSetting = Office.context.roamingSettings.get("forward");
   let overrideSetting = Office.context.roamingSettings.get("override_olk_signature");
 
+  // Set defaults for first-time users
+  if (newMailSetting === null || newMailSetting === undefined) {
+    newMailSetting = 'syncsignature';
+    Office.context.roamingSettings.set('newMail', newMailSetting);
+  }
+  if (replySetting === null || replySetting === undefined) {
+    replySetting = 'syncsignature';
+    Office.context.roamingSettings.set('reply', replySetting);
+  }
+  if (forwardSetting === null || forwardSetting === undefined) {
+    forwardSetting = 'syncsignature';
+    Office.context.roamingSettings.set('forward', forwardSetting);
+  }
+  
+  // Save defaults if they were set
+  if (newMailSetting === 'syncsignature' || replySetting === 'syncsignature' || forwardSetting === 'syncsignature') {
+    save_user_settings_to_roaming_settings();
+  }
+
   $("#newMailSignature").prop('checked', newMailSetting === 'syncsignature');
   $("#replySignature").prop('checked', replySetting === 'syncsignature');
   $("#forwardSignature").prop('checked', forwardSetting === 'syncsignature');
@@ -147,6 +166,16 @@ async function set_syncsignature()
   };
   localStorage.setItem('user_info', JSON.stringify(user_info));
   console.log("User Info:", user_info);
+  
+  // Ensure default settings are applied if this is the first time or no settings exist
+  let newMailSetting = Office.context.roamingSettings.get("newMail");
+  let replySetting = Office.context.roamingSettings.get("reply");
+  let forwardSetting = Office.context.roamingSettings.get("forward");
+  
+  // Apply defaults if settings don't exist
+  if (!newMailSetting) $("#newMailSignature").prop('checked', true);
+  if (!replySetting) $("#replySignature").prop('checked', true);
+  if (!forwardSetting) $("#forwardSignature").prop('checked', true);
   
   // Debug: Log current checkbox states before saving
   console.log("Checkbox states before saving:");
@@ -178,7 +207,11 @@ async function set_syncsignature()
     alert("Signature settings saved successfully! The signature will be applied based on your selected email types.");
   }
   else {
-    alert("Failed to fetch signature. Please try again.");
+    // Don't show alert if signin prompt is already shown
+    const signinPrompt = document.getElementById("signin_prompt");
+    if (!signinPrompt || signinPrompt.style.display === "none") {
+      alert("Failed to fetch signature. Please try again.");
+    }
   }
 }
 
@@ -241,9 +274,11 @@ async function fetchSignatureFromSyncSignature() {
             console.log(response.status)
             if (response.status === 404) {
               const errorText = await response.text();
-              dummySignatureDiv.innerHTML = "Signature Not Configure at SyncSignature";
-              submitButton.disabled = true; // Disable the submit button
-              return "Signature Not Configure at SyncSignature";
+              // Show signin prompt instead of just displaying error
+              showSigninPrompt();
+              dummySignatureDiv.innerHTML = "";
+              submitButton.disabled = true;
+              return null;
            }
             
         }
@@ -254,14 +289,70 @@ async function fetchSignatureFromSyncSignature() {
         const data = await response.json();
         console.log("Received data:", data);
         console.log("Received data:", data.html);
+        
+        // Hide signin prompt if it was shown and signature is found
+        hideSigninPrompt();
+        
         dummySignatureDiv.innerHTML = data.html || "No signature available";
         submitButton.disabled = !data.html;
         return data.html;
 
     } catch (error) {
         console.error("Error fetching signature from SyncSignature API:", error);
+        // Show signin prompt on error
+        showSigninPrompt();
         return null;
     }
+}
+
+// Signin functionality
+function showSigninPrompt() {
+    const signinPrompt = document.getElementById("signin_prompt");
+    const selectedSignatureSection = document.getElementById("selectedSignatureSection");
+    const submitButton = document.getElementById("submit_button");
+    
+    if (signinPrompt) {
+        signinPrompt.style.display = "block";
+    }
+    
+    // Hide other sections when showing signin prompt
+    if (selectedSignatureSection) {
+        selectedSignatureSection.style.display = "none";
+    }
+    
+    if (submitButton) {
+        submitButton.style.display = "none";
+    }
+}
+
+function hideSigninPrompt() {
+    const signinPrompt = document.getElementById("signin_prompt");
+    const selectedSignatureSection = document.getElementById("selectedSignatureSection");
+    const submitButton = document.getElementById("submit_button");
+    
+    if (signinPrompt) {
+        signinPrompt.style.display = "none";
+    }
+    
+    // Show other sections when hiding signin prompt
+    if (selectedSignatureSection) {
+        selectedSignatureSection.style.display = "block";
+    }
+    
+    if (submitButton) {
+        submitButton.style.display = "inline-block";
+    }
+}
+
+function openSigninPage() {
+    // Open SyncSignature signin page in a new window/tab
+    window.open("https://app.syncsignature.com/auth/login", "_blank");
+}
+
+function retryFetchSignature() {
+    // Hide signin prompt and retry fetching signature
+    hideSigninPrompt();
+    set_syncsignature();
 }
 
 Office.onReady(function() {

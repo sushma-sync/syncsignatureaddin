@@ -60,19 +60,19 @@
           <p class="option-description">Apply signature to forwarded messages</p>
         </div>
         
-        <div class="option-card" id="overrideCard">
+        <!-- <div class="option-card" id="overrideCard">
           <div class="option-header">
             <input type="checkbox" id="overrideOutlookSignature">
             <label for="overrideOutlookSignature" class="option-title">Override Outlook Default</label>
             <span class="checkmark">✓</span>
           </div>
           <p class="option-description">Replace Outlook's default signature</p>
-        </div>
+        </div> -->
       </div>
     </div>
     
     <!-- Selected signature display section -->
-    <div class="selected-signature-section" id="selectedSignatureSection">
+    <!-- <div class="selected-signature-section" id="selectedSignatureSection">
       <h3 class="section-title">Your Selected Configuration</h3>
       <div class="selected-options" id="selectedOptions">
         <div class="selected-item active" id="selectedNewEmail">
@@ -80,9 +80,19 @@
           <span class="selected-text">New Email</span>
         </div>
       </div>
-    </div>
+    </div> -->
     
     <button id="submit_button" type="submit" class="registerbtn" onclick="set_syncsignature()">Set Signature</button>
+    
+    <!-- Signin prompt section (hidden by default) -->
+    <div id="signin_prompt" class="signin-prompt">
+      <div class="signin-content">
+        <h3>Sign In Required</h3>
+        <p>Don't have a Syncsignature account? Sign in</p>
+        <button id="signin_button" class="signin-btn" onclick="openSigninPage()">Sign In to SyncSignature</button>
+        <!-- <button id="retry_button" class="retry-btn" onclick="retryFetchSignature()">Retry</button> -->
+      </div>
+    </div>
     
     <div id="dummy_signature" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;">
     </div>

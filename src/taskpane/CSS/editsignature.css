@@ -298,3 +298,143 @@ input[type=text]:focus, input[type=number]:focus, input[type=email]:focus {
   font-style: italic;
   font-size: 14px;
 }
+
+/* Signin prompt styles */
+.signin-prompt {
+  background-color: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  text-align: center;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.signin-content h3 {
+  color: #424242;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.signin-content p {
+  color: #6c757d;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.signin-btn {
+  background-color: #7f56d9;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 8px auto;
+  transition: background-color 0.2s ease;
+  width: 100%;
+  max-width: 280px;
+  min-height: 44px;
+  display: block;
+  box-sizing: border-box;
+}
+
+.signin-btn:hover {
+  background-color: #6b46c1;
+}
+
+.retry-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retry-btn:hover {
+  background-color: #545b62;
+}
+
+/* Mobile compatibility styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+    margin: 0;
+  }
+  
+  .signature-selection-section {
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .section-title {
+    font-size: 16px;
+  }
+  
+  .option-card {
+    padding: 12px;
+  }
+  
+  .option-title {
+    font-size: 14px;
+  }
+  
+  .option-description {
+    font-size: 12px;
+  }
+  
+  .signin-prompt {
+    padding: 12px;
+    margin: 12px 0;
+  }
+  
+  .signin-content h3 {
+    font-size: 16px;
+  }
+  
+  .signin-content p {
+    font-size: 13px;
+  }
+  
+  .signin-btn {
+    padding: 14px 20px;
+    font-size: 15px;
+    margin: 10px auto;
+  }
+  
+  .registerbtn, #submit_button {
+    width: 100%;
+    max-width: 280px;
+    margin: 15px auto;
+    display: block;
+  }
+  
+  input {
+    width: 100%;
+    max-width: 280px;
+    box-sizing: border-box;
+  }
+}
+
+/* Touch-friendly tap targets for mobile */
+@media (max-width: 768px) {
+  .option-card {
+    min-height: 44px;
+  }
+  
+  .option-card input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .signin-btn, .retry-btn {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+}

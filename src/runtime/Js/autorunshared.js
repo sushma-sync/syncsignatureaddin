@@ -173,9 +173,8 @@ function get_template_name(compose_type) {
   } else if (compose_type === "forward") {
     templateName = Office.context.roamingSettings.get("forward") || 'none';
   } else {
-    templateName = Office.context.roamingSettings.get("newMail") || 'syncsignature'; // Default to enabled for new mail
+    templateName = 'syncsignature'; 
   }
-  
   console.log("Template name for", compose_type, ":", templateName);
   return templateName;
 }
