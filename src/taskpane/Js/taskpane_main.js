@@ -188,6 +188,7 @@ function load_signature_settings()
 
 async function set_syncsignature()
 {
+  console.log("Set signature called")
   // Get user email from Outlook API
   let userEmail = Office.context.mailbox ? Office.context.mailbox.userProfile.emailAddress : "Unknown User";
   let user_info = {
