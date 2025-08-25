@@ -52,15 +52,21 @@ function save_signature_settings()
 
 	disable_client_signatures_if_necessary();
 
-	$("#message").show("slow");
+	// Show simple success message
+	const messageElement = document.getElementById("message");
+	if (messageElement) {
+		messageElement.textContent = "Settings saved successfully!";
+		messageElement.style.cssText = "display: block; margin-top: 15px; color: #323130; font-size: 14px; text-align: center; padding: 0; background: none; border: none;";
+		setTimeout(() => {
+			messageElement.style.display = "none";
+		}, 3000);
+	}
   }
   else
   {
 	// TBD display an error somewhere?
   }
 }
-
-
 
 function set_body(str)
 {
@@ -257,7 +263,7 @@ async function set_syncsignature()
     const messageElement = document.getElementById("message");
     if (messageElement) {
         messageElement.textContent = "Signature settings saved successfully! The signature will be applied based on your selected email types.";
-        messageElement.style.display = "block";
+        messageElement.style.cssText = "display: block; margin-top: 15px; color: #323130; font-size: 14px; text-align: center; padding: 0; background: none; border: none;";
         setTimeout(() => {
             messageElement.style.display = "none";
         }, 5000);
