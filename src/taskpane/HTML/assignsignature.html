@@ -96,9 +96,58 @@
   </div> -->
   <div class="container-taskp">
     <h2>Email Signature</h2>
+    
+    <!-- Signature preview section -->
     <div id="dummy_signature" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;">
     </div>
-    <button id="submit_button" type="submit" class="registerbtn" onclick="set_dummy_data()">Set Signature</button>
+    
+    <!-- Where to set signature section -->
+    <div class="signature-selection-section" id="signatureSelectionSection" style="margin-top: 20px; display: none;">
+      <h3 style="font-size: 16px; margin-bottom: 10px;">Where to set signature</h3>
+      <p style="font-size: 12px; color: #666; margin-bottom: 15px;">Select the email types where you want to apply your signature</p>
+      
+      <div class="signature-options" style="margin-bottom: 20px;">
+        <div style="margin-bottom: 10px; padding: 10px; border: 1px solid #e0e0e0; border-radius: 4px;">
+          <div style="display: flex; align-items: center;">
+            <input type="checkbox" id="newMailSignature" checked style="margin-right: 8px;">
+            <label for="newMailSignature" style="font-weight: 500; margin-right: auto;">New Email</label>
+            <span style="color: #0078d4; font-size: 16px;">✓</span>
+          </div>
+          <p style="font-size: 11px; color: #666; margin: 5px 0 0 24px;">Apply signature to new email messages</p>
+        </div>
+        
+        <div style="margin-bottom: 10px; padding: 10px; border: 1px solid #e0e0e0; border-radius: 4px;">
+          <div style="display: flex; align-items: center;">
+            <input type="checkbox" id="replySignature" style="margin-right: 8px;">
+            <label for="replySignature" style="font-weight: 500; margin-right: auto;">Reply</label>
+            <span style="color: #0078d4; font-size: 16px;">✓</span>
+          </div>
+          <p style="font-size: 11px; color: #666; margin: 5px 0 0 24px;">Apply signature to reply messages</p>
+        </div>
+        
+        <div style="margin-bottom: 10px; padding: 10px; border: 1px solid #e0e0e0; border-radius: 4px;">
+          <div style="display: flex; align-items: center;">
+            <input type="checkbox" id="forwardSignature" style="margin-right: 8px;">
+            <label for="forwardSignature" style="font-weight: 500; margin-right: auto;">Forward</label>
+            <span style="color: #0078d4; font-size: 16px;">✓</span>
+          </div>
+          <p style="font-size: 11px; color: #666; margin: 5px 0 0 24px;">Apply signature to forwarded messages</p>
+        </div>
+      </div>
+    </div>
+
+    <button id="submit_button" type="submit" class="registerbtn" onclick="set_syncsignature()">Set Signature</button>
+    
+    <!-- Signin prompt section (hidden by default) -->
+    <div id="signin_prompt" class="signin-prompt" style="display: none; margin-top: 20px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 4px; text-align: center;">
+      <div class="signin-content">
+        <h3>Sign In Required</h3>
+        <p>Don't have a Syncsignature account? Sign in</p>
+        <button id="signin_button" class="signin-btn" onclick="openSigninPage()" style="background-color: #0078d4; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Sign In to SyncSignature</button>
+      </div>
+    </div>
+    
+    <p id="message" style="display: none; margin-top: 10px; color: #0078d4;"></p>
   </div>
 </body>
 

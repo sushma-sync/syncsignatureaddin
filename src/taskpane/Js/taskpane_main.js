@@ -203,8 +203,21 @@ async function set_syncsignature()
       console.log("override_olk_signature:", Office.context.roamingSettings.get('override_olk_signature'));
     }, 1000);
     
+    // Ensure signature selection section remains visible
+    const signatureSelectionSection = document.getElementById("signatureSelectionSection");
+    if (signatureSelectionSection) {
+        signatureSelectionSection.style.display = "block";
+    }
+    
     // Show success message
-    alert("Signature settings saved successfully! The signature will be applied based on your selected email types.");
+    const messageElement = document.getElementById("message");
+    if (messageElement) {
+        messageElement.textContent = "Signature settings saved successfully! The signature will be applied based on your selected email types.";
+        messageElement.style.display = "block";
+        setTimeout(() => {
+            messageElement.style.display = "none";
+        }, 5000);
+    }
   }
   else {
     // Don't show alert if signin prompt is already shown
@@ -273,7 +286,6 @@ async function fetchSignatureFromSyncSignature() {
         if (!response.ok) {
             console.log(response.status)
             if (response.status === 404) {
-              const errorText = await response.text();
               // Show signin prompt instead of just displaying error
               showSigninPrompt();
               dummySignatureDiv.innerHTML = "";
@@ -293,6 +305,12 @@ async function fetchSignatureFromSyncSignature() {
         // Hide signin prompt if it was shown and signature is found
         hideSigninPrompt();
         
+        // Show signature selection section if signature is found
+        const signatureSelectionSection = document.getElementById("signatureSelectionSection");
+        if (signatureSelectionSection) {
+            signatureSelectionSection.style.display = "block";
+        }
+        
         dummySignatureDiv.innerHTML = data.html || "No signature available";
         submitButton.disabled = !data.html;
         return data.html;
@@ -309,6 +327,7 @@ async function fetchSignatureFromSyncSignature() {
 function showSigninPrompt() {
     const signinPrompt = document.getElementById("signin_prompt");
     const selectedSignatureSection = document.getElementById("selectedSignatureSection");
+    const signatureSelectionSection = document.getElementById("signatureSelectionSection");
     const submitButton = document.getElementById("submit_button");
     
     if (signinPrompt) {
@@ -320,6 +339,10 @@ function showSigninPrompt() {
         selectedSignatureSection.style.display = "none";
     }
     
+    if (signatureSelectionSection) {
+        signatureSelectionSection.style.display = "none";
+    }
+    
     if (submitButton) {
         submitButton.style.display = "none";
     }
@@ -328,6 +351,7 @@ function showSigninPrompt() {
 function hideSigninPrompt() {
     const signinPrompt = document.getElementById("signin_prompt");
     const selectedSignatureSection = document.getElementById("selectedSignatureSection");
+    const signatureSelectionSection = document.getElementById("signatureSelectionSection");
     const submitButton = document.getElementById("submit_button");
     
     if (signinPrompt) {
@@ -337,6 +361,10 @@ function hideSigninPrompt() {
     // Show other sections when hiding signin prompt
     if (selectedSignatureSection) {
         selectedSignatureSection.style.display = "block";
+    }
+    
+    if (signatureSelectionSection) {
+        signatureSelectionSection.style.display = "block";
     }
     
     if (submitButton) {
@@ -362,6 +390,14 @@ Office.onReady(function() {
   // Load signature settings when page loads
   $(document).ready(function() {
     load_signature_settings();
+    // Set user info and try to fetch signature on page load
+    let userEmail = Office.context.mailbox ? Office.context.mailbox.userProfile.emailAddress : "Unknown User";
+    let user_info = {
+        name: userEmail.split("@")[0], 
+        email: userEmail
+    };
+    localStorage.setItem('user_info', JSON.stringify(user_info));
+    fetchSignatureFromSyncSignature();
   });
 });
 function insertDefaultSignature(event) {
